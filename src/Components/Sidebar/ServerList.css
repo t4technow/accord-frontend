@@ -1,0 +1,89 @@
+.server-list {
+	width: 72px;
+	background-color: var(--dark);
+	height: 100vh;
+	padding-top: 0.5rem;
+	overflow-x: auto;
+}
+
+.server-list::-webkit-scrollbar {
+	display: none;
+}
+
+.server-list_item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 48px;
+	position: relative;
+}
+
+.server-list_item:not(:last-of-type) {
+	margin-bottom: 0.5rem;
+}
+
+.server {
+	height: 48px;
+	cursor: pointer;
+	width: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--accent);
+	border-radius: 50%;
+	transition: all 0.2s ease;
+}
+
+.mention-pill.unread {
+	height: 8px;
+}
+
+.mention-pill {
+	width: 4px;
+	background-color: var(--white);
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	position: absolute;
+	left: 0;
+	transition: all 0.3s ease;
+}
+
+.server-list_item:has(.server:hover) .mention-pill {
+	height: 22px;
+}
+
+.server-list_item:has(.server.active) .mention-pill {
+	height: 40px;
+}
+
+img.server_avatar {
+	height: 48px;
+	width: 48px;
+	transition: all 0.2s ease;
+}
+
+.server:hover,
+.server.active,
+.server-list_item:has(.server.active) .server_avatar,
+.server-list_item .server:hover img.server_avatar {
+	border-radius: 12px;
+	background-color: var(--green);
+}
+
+.server svg {
+	fill: var(--green);
+}
+
+.server.active svg,
+.server:hover svg {
+	fill: #fff;
+}
+
+.separator {
+	height: 2px;
+	width: 32px;
+	background-color: var(--separator);
+	margin: auto;
+	margin-bottom: 0.5rem;
+}

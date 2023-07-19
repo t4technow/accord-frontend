@@ -1,0 +1,44 @@
+.send-message {
+	position: absolute;
+	bottom: 1rem;
+	left: 1rem;
+	right: 1rem;
+}
+
+.send-message input {
+	font-family: var(--font-display);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 22px;
+	text-indent: 0px;
+	vertical-align: baseline;
+	word-break: break-word;
+	color: rgb(219, 222, 225);
+	padding: 0.5rem 1rem;
+	background-color: var(--active);
+}
+
+.send-message button {
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 30px;
+	border-radius: 30px;
+	background: var(--accent);
+	width: 46px;
+}
+
+.send-message button .svg {
+	fill: var(--dark);
+	text-shadow: white;
+}
+
+.one,
+.two,
+.three {
+	fill: var(--primary-color);
+}

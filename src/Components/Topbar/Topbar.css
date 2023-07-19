@@ -1,0 +1,35 @@
+.topbar {
+	background: #313338;
+	width: 100%;
+	justify-content: space-between;
+	overflow-y: scroll;
+}
+
+.topbar::-webkit-scrollbar {
+	display: none;
+}
+
+.topbar,
+.topbar-header,
+.topbar-menu {
+	align-items: center;
+}
+
+.topbar-menu {
+	gap: 1rem;
+}
+
+.topbar-item {
+	padding: 0.2rem 0.5rem;
+	cursor: pointer;
+}
+
+.topbar-item:hover {
+	background: var(--active);
+}
+
+@media (max-width: 968px) {
+	.topbar-header {
+		display: none;
+	}
+}

@@ -1,0 +1,373 @@
+:root {
+  --primary-color: #949ba4;
+  --accent: #313338;
+  --dark: #1e1f22;
+  --green: #23a559;
+  --separator: #4e50587a;
+  --font-primary: "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-headline: "ABC Ginto Nord", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: ABC Ginto Nord;
+  font-style: normal;
+  font-weight: 800;
+  src: url(../fonts/abs-ginto-nord.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: gg sans;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/gg-sans-normal-400.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: gg sans;
+  font-style: normal;
+  font-weight: 500;
+  src: url(../fonts/gg-sans-normal-500.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: gg sans;
+  font-style: normal;
+  font-weight: 600;
+  src: url(../fonts/gg-sans-normal-600.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: gg sans;
+  font-style: normal;
+  font-weight: 700;
+  src: url(../fonts/gg-sans-normal-700.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: gg sans;
+  font-style: normal;
+  font-weight: 800;
+  src: url(../fonts/gg-sans-normal-800.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Noto Sans;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/noto-sans-400.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Noto Sans;
+  font-style: normal;
+  font-weight: 500;
+  src: url(../fonts/noto-sans-500.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Noto Sans;
+  font-style: normal;
+  font-weight: 600;
+  src: url(../fonts/noto-sans-600.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Noto Sans;
+  font-style: normal;
+  font-weight: 700;
+  src: url(../fonts/noto-sans-700.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Noto Sans;
+  font-style: normal;
+  font-weight: 800;
+  src: url(../fonts/noto-sans-800.woff2) format("woff2")
+}
+
+@font-face {
+  font-family: Source Code Pro;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/source-code-pro-400.woff2) format("woff2")
+}
+
+
+@font-face {
+  font-family: Source Code Pro;
+  font-style: normal;
+  font-weight: 600;
+  src: url(../fonts/source-code-pro-600.woff2) format("woff2")
+}
+
+body {
+  color: #949ba4;
+  background-color: var(--accent);
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.sidebar {
+  width: 72px;
+  background: var(--dark);
+  height: 100vh;
+  overflow-y: auto;
+  padding-top: 12px;
+}
+
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 8px;
+  width: 8px;
+  background-color: #fff;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transition: all .25s ease-in;
+}
+
+.menu-item:hover::before {
+  height: 20px;
+}
+
+.menu-item.active::before {
+  height: 40px;
+}
+
+.menu-item,
+.menu-item img {
+  background-color: var(--accent);
+  border-radius: 50%;
+}
+
+.menu-item,
+.main-menu img {
+  width: 48px;
+  height: 48px;
+}
+
+.menu-item a,
+.menu-item svg,
+.chat-list svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--green)
+}
+
+.menu-item svg path {
+  fill: var(--green)
+}
+
+.menu-item.svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-item:first-of-type {
+  background-color: #5865f2;
+  border-radius: 1rem;
+}
+
+.menu-item:first-of-type svg path {
+  fill: #fff;
+}
+
+.separator {
+  background-color: var(--separator);
+  height: 2px;
+}
+
+nav .separator {
+  width: 32px;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+/* Chat Bar */
+.chat-bar {
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 240px;
+  background-color: #2b2d31;
+}
+
+.chat-bar .user-extra {
+  height: 52px;
+  background-color: #232428;
+  color: #fff;
+}
+
+.chat-bar > nav > .search, 
+.base nav {
+  height: 48px;
+  border-bottom: 1px solid var(--dark);
+}
+
+.chat-bar > nav > .search {
+  padding: 0 2px;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-bar > nav > .search > #searchInput {
+  width: 100%;
+  height: 28px;
+  background-color: var(--dark);
+  box-shadow: none;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  align-items: center;
+  line-height: 26px;
+  padding: 1px 6px;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.chat-list_wrapper {
+  padding: 0 8px;
+}
+
+.chat-list {
+  margin-top: .5rem;
+}
+
+.chat-list a.d-flex {
+  padding: 6px;
+}
+
+.chat-list .single-chat {
+  margin-bottom: 2px;
+  transition: all .25s ease-in;
+}
+
+.chat-list .name {
+  align-items: center;
+  gap: .7rem;
+  width: 100%;
+}
+
+.chat-list .single-chat.active,
+.chat-list .single-chat:hover {
+  background-color: #4e50587a;
+  border-radius: 4px;
+}
+
+.chat-list .name img {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+
+.chat {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification {
+  font-weight: bolder;
+  font-size: 10px;
+  color: #fff;
+  background-color: red;
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+  text-align: center;
+  line-height: 16px;
+}
+
+.small-heading {
+  justify-content: space-between;
+  font-size: 12px;
+  text-transform: uppercase;
+  align-items: center;
+  padding: 18px 8px 8px 12px;
+}
+
+.small-heading svg {
+  height: 16px;
+  width: 16px;
+}
+
+/* Main Area */
+.base {
+  flex-grow: 1;
+}
+
+.base nav {
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.base nav,
+h2.d-flex {
+  align-items: center;
+}
+
+.base nav {
+  padding: 0 8px;
+  flex-grow: 1;
+}
+
+.actions li {
+  margin-inline: 8px;
+}
+
+.actions svg{
+  height: 24px;
+  width: 24px;
+}
+
+.actions .search {
+  align-items: center;
+}
+
+.actions .search input {
+  height: 24px;
+  position: relative;
+}
+
+.actions .search svg {
+  position: absolute;
+  right: 10px;
+}

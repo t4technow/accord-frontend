@@ -1,0 +1,116 @@
+.chat-area {
+	flex-grow: 1;
+	position: relative;
+}
+
+.messages {
+	padding: 0.5rem 1.3rem;
+	max-height: calc(100vh - 116px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin-inline: 0.2rem;
+}
+.messages::-webkit-scrollbar {
+	width: 8px;
+	display: none;
+}
+
+.messages::-webkit-scrollbar-thumb {
+	background-color: #1a1b1e;
+	border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-track {
+	background-color: #2b2d31;
+}
+
+.messages:hover {
+	padding-right: 0.8rem;
+}
+
+.messages:hover::-webkit-scrollbar {
+	display: block;
+}
+
+/* For Firefox */
+@-moz-document url-prefix() {
+	.messages {
+		scrollbar-width: thin;
+		scrollbar-color: var(--dark) transparent;
+	}
+
+	.messages:hover {
+		padding-right: 0;
+	}
+
+	.messages:hover::-moz-scrollbar-thumb {
+		background-color: var(--dark);
+	}
+
+	.messages:hover::-moz-scrollbar-track {
+		background-color: transparent;
+	}
+}
+
+.message {
+	color: #fff;
+	width: fit-content;
+	padding: 0.5rem;
+	border-radius: 6px;
+	margin-bottom: 4px;
+	position: relative;
+	z-index: 1;
+}
+
+.message::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	border-width: 10px;
+	border-style: solid;
+	z-index: 0;
+	display: none;
+	border-radius: 2px;
+}
+
+.send.message::after {
+	right: -9px;
+	border-color: transparent transparent var(--active) transparent;
+}
+
+.received.message::after {
+	left: -9px;
+	border-color: transparent transparent var(--dark) transparent;
+}
+
+.send + .send::after,
+.send:not(:has(+ .send))::after,
+.received + .received::after,
+.received:not(:has(+ .received))::after {
+	display: block;
+}
+
+.send.message {
+	background: var(--active);
+	margin-left: auto;
+}
+
+.received.message {
+	background: var(--dark);
+}
+
+.friends-list_item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.friends-list_item_info {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.chat-area .channel-list_item {
+	margin-right: 8px;
+}

@@ -1,0 +1,168 @@
+.secondary-sidebar {
+	width: 240px;
+	height: 100vh;
+	overflow: hidden;
+	background-color: var(--dark-secondary);
+}
+
+.topbar,
+.secondary-sidebar_header {
+	height: 48px;
+	padding: 10px;
+	box-shadow: rgba(2, 2, 2, 0.2) 0px 1px;
+}
+
+.secondary-sidebar_header .search-toggler {
+	width: 100%;
+	height: 100%;
+	padding: 1px 6px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 24px;
+	text-align: start;
+	color: var(--primary-color);
+	background-color: var(--dark);
+	border-radius: 4px;
+}
+
+.channel-list {
+	padding-right: 0.5rem;
+	padding-top: 0.5rem;
+	height: calc(100% - 80px);
+	overflow-y: scroll;
+}
+
+.channel-list::-webkit-scrollbar {
+	width: 8px;
+	display: none;
+}
+
+.channel-list::-webkit-scrollbar-thumb {
+	background-color: var(--dark);
+	border-radius: 4px;
+}
+
+.channel-list:hover {
+	padding-right: 0;
+}
+
+.channel-list:hover::-webkit-scrollbar {
+	display: block;
+}
+
+/* For Firefox */
+@-moz-document url-prefix() {
+	.channel-list {
+		scrollbar-width: thin;
+		scrollbar-color: var(--dark) transparent;
+	}
+
+	.channel-list:hover {
+		padding-right: 0;
+	}
+
+	.channel-list:hover::-moz-scrollbar-thumb {
+		background-color: var(--dark);
+	}
+
+	.channel-list:hover::-moz-scrollbar-track {
+		background-color: transparent;
+	}
+}
+
+.channels-head {
+	display: flex;
+	padding: 18px 8px 4px 18px;
+	height: 40px;
+	box-sizing: border-box;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-transform: uppercase;
+	font-size: 12px;
+	line-height: 16px;
+	letter-spacing: 0.02em;
+	font-family: var(--font-display);
+	font-weight: 600;
+	-webkit-box-flex: 1;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	color: var(--primary-color);
+}
+
+.channels-head .heading {
+	flex-basis: 100%;
+}
+
+.channels-head .add {
+	font-size: 20px;
+}
+
+.channel-list .channel-list_item {
+	margin-left: 8px;
+}
+
+.channel-list_item {
+	padding: 1px 0px;
+}
+
+.channel {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+	gap: 0.5rem;
+}
+
+.channel.dm {
+	height: 42px;
+	gap: 0.75rem;
+}
+
+.channel.active {
+	background-color: var(--active);
+	color: var(--white);
+}
+
+.channel:hover {
+	background-color: var(--hover-bg);
+	color: var(--hover-text);
+}
+
+.channel.dm .channel-avatar {
+	width: 32px;
+	height: 32px;
+	background: var(--dark);
+}
+
+.user-profile.avatar.name,
+.channel-avatar.name {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+}
+
+.channel svg {
+	height: 20px;
+	width: 20px;
+}
+
+.channel-name {
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 500;
+
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	position: relative;
+}
+
+.user-info {
+	position: fixed;
+	bottom: 0;
+	height: 80px;
+}

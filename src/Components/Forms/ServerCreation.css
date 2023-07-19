@@ -1,0 +1,162 @@
+.overlay {
+	position: absolute;
+	inset: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+	backdrop-filter: blur(2px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.form-holder {
+	width: 440px;
+	padding: 1rem;
+	background: #fff;
+	color: black;
+	position: relative;
+	border-radius: 4px;
+	transition: height 0.2s ease;
+}
+
+.modal-heading {
+	padding-top: 0.5rem;
+	font-weight: 700;
+	color: #060607;
+	text-align: center;
+}
+
+.form-holder .sub-heading {
+	margin-top: 0.5rem;
+	margin-bottom: 1.5rem;
+	color: #4e5058;
+	text-align: center;
+	font-size: 1rem;
+}
+
+.form-holder .close-modal {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.categories_item {
+	padding: 4px 0;
+	width: 100%;
+	border: 0.8px solid #80848e3d;
+	background: #ffffff;
+	color: #313338;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+}
+
+.categories_item:not(:last-of-type) {
+	margin-bottom: 8px;
+}
+
+.categories_item:hover {
+	background-color: #80848e3d;
+}
+
+.category {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.5rem;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+	gap: 0.5rem;
+}
+
+.category_info {
+	display: flex;
+	align-items: center;
+}
+
+.category-name {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.image-selector {
+	height: 84px;
+}
+
+.icon-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.uploaded-image-preview,
+.server-avatar-selector {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.server-avatar-selector {
+	position: absolute;
+	opacity: 0;
+}
+
+.uploaded-image-preview {
+	object-fit: cover;
+}
+
+.server-name-container {
+	margin-top: 1.5rem;
+}
+
+.secondary-label {
+	display: block;
+	font-size: 14px;
+	font-weight: 700;
+	color: rgb(78, 80, 88);
+	margin-bottom: 0.5rem;
+}
+
+.grayed-out {
+	width: 100%;
+	color: rgb(49, 51, 56);
+	background-color: rgb(227, 229, 232);
+	padding: 10px;
+	height: 40px;
+	border-radius: 3px;
+}
+
+.modal-footer {
+	background: rgb(242, 243, 245);
+	margin: -1rem;
+	margin-top: 2rem;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.modal-footer button {
+	height: 38px;
+}
+
+.create {
+	background-color: rgb(88, 101, 242);
+	padding: 2px 1rem;
+	font-size: 14px;
+	font-weight: 500;
+	color: #fff;
+	border-radius: 3px;
+	width: 96px;
+}
+
+.back {
+	padding: 4px;
+}
