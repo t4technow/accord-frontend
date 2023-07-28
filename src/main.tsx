@@ -1,11 +1,13 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+
+// Provider and store to give access to the components to states and actions in redux
 import { Provider } from "react-redux";
 import { Store } from "./redux/Store.ts";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+import App from "./App.tsx";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("accord")!).render(
 	<Provider store={Store}>
 		<App />
 	</Provider>

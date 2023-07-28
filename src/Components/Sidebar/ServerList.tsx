@@ -1,29 +1,40 @@
+// React hooks and types
 import { useEffect, SetStateAction } from "react";
-import axiosInstance from "@/config/axiosInstance";
-import { Server } from "@/lib/Types";
 
-import "./ServerList.css";
+// Redux hooks and states stored in redux
+import { useDispatch, useSelector } from "react-redux";
+import { setServers, setCurrentServer } from "@/redux/server/ServerSlice";
+
+// AxiosInstance and constants
+import axiosInstance from "@/config/axiosInstance";
 import { imageBase } from "@/config/Constants";
 
+// Types
+import { RootState } from "@/lib/Types";
+
+// Styles
+import "./ServerList.css";
+import { useNavigate } from "react-router-dom";
+
+// Props & Peculiar Types
 type Props = {
-	currentServer: number | string;
-	setCurrentServer: React.Dispatch<SetStateAction<number | string>>;
 	showCreateServer: boolean;
 	setShowCreateServer: React.Dispatch<SetStateAction<boolean>>;
-	servers: Server[];
-	setServers: React.Dispatch<SetStateAction<Server[]>>;
 };
 
-const ServerList = ({
-	currentServer,
-	setCurrentServer,
-	showCreateServer,
-	setShowCreateServer,
-	servers,
-	setServers,
-}: Props) => {
+const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
+	// Get servers and active from redux state
+	const servers = useSelector((state: RootState) => state.server.servers);
+	const currentServer = useSelector(
+		(state: RootState) => state.server.currentServer
+	);
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	// Get servers of current user
 	useEffect(() => {
-		axiosInstance.get("server/").then((res) => setServers(res.data));
+		axiosInstance.get("server/").then((res) => dispatch(setServers(res.data)));
 		return () => {};
 	}, []);
 
@@ -34,27 +45,34 @@ const ServerList = ({
 				<div
 					className={`server ${currentServer === "dm" ? "active" : ""}`}
 					onClick={() => {
-						setCurrentServer("dm");
+						dispatch(setCurrentServer("dm"));
+						navigate("/@me");
 					}}
 				>
-					<img className="server_avatar avatar" src="adobe.jpg" />
+					<img className="server_avatar avatar" src="/adobe.jpg" />
 				</div>
 			</div>
 			<div className="separator"></div>
-			{servers.map((server) => (
-				<div className="server-list_item" key={server.id}>
-					<div className="mention-pill unread"></div>
-					<div
-						className={`server ${server.id === currentServer ? "active" : ""}`}
-						onClick={() => setCurrentServer(server.id)}
-					>
-						<img
-							className="server_avatar avatar"
-							src={`${imageBase}${server.avatar}`}
-						/>
+			{servers &&
+				servers.map((server) => (
+					<div className="server-list_item" key={server.id}>
+						<div className="mention-pill unread"></div>
+						<div
+							className={`server ${
+								server.id === currentServer ? "active" : ""
+							}`}
+							onClick={() => {
+								dispatch(setCurrentServer(server.id));
+								navigate(`/${server.id}`);
+							}}
+						>
+							<img
+								className="server_avatar avatar"
+								src={`${imageBase}${server.avatar}`}
+							/>
+						</div>
 					</div>
-				</div>
-			))}
+				))}
 			<div
 				className="server-list_item"
 				onClick={() => setShowCreateServer(true)}

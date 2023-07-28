@@ -1,11 +1,18 @@
+// React and React Router hooks and types
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
+// Redux hooks and states stored in redux
 import { useDispatch } from "react-redux";
 import { loginReducer } from "@/redux/user/userSlice";
 
+// Axios instance
 import axiosInstance from "@/config/axiosInstance";
+
+// Package to decode jwt Tokens
 import jwtDecode from "jwt-decode";
+
+// Types
 import { AccessDetails } from "@/lib/Types";
 
 const Login = () => {
@@ -21,6 +28,7 @@ const Login = () => {
 	const [errors, setErrors] = useState({ email: "", password: "" });
 	const [authError, setAuthError] = useState("");
 
+	// Function to check if is redirected and has any messages
 	useEffect(() => {
 		if (location.state) {
 			if (location.state.message) {
@@ -33,6 +41,7 @@ const Login = () => {
 		}
 	}, []);
 
+	// function to validate Login Form
 	function validateForm() {
 		let isValid = true;
 		let updatedErrors = { email: "", password: "" };
@@ -49,10 +58,12 @@ const Login = () => {
 		return isValid;
 	}
 
+	// function to handle form submission and login user
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (validateForm()) {
+			// state to add loading animation
 			setIsValidating(true);
 			axiosInstance
 				.post("user/token/", {
@@ -60,13 +71,16 @@ const Login = () => {
 					password: passwordRef.current?.value,
 				})
 				.then((res) => {
+					// add token of authenticated user to local storage and update axios instance headers
 					localStorage.setItem("access_token", res.data.access);
 					localStorage.setItem("refresh_token", res.data.refresh);
 					axiosInstance.defaults.headers["Authorization"] =
 						"JWT " + res.data.access;
 
+					// decode Access Token
 					const access_details: AccessDetails = jwtDecode(res.data.access);
 
+					// Update user state in redux
 					dispatch(
 						loginReducer({
 							isAuthenticated: true,

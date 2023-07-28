@@ -1,3 +1,7 @@
+.input-holder.d-flex {
+	position: relative;
+}
+
 .send-message {
 	position: absolute;
 	bottom: 1rem;
@@ -16,20 +20,44 @@
 	color: rgb(219, 222, 225);
 	padding: 0.5rem 1rem;
 	background-color: var(--active);
+	padding-left: 2rem;
 }
 
 .send-message button {
 	position: absolute;
-	right: 5px;
 	top: 50%;
 	transform: translateY(-50%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background: none;
+	color: rgb(219, 222, 225);
+}
+
+.send-message .send-btn {
 	height: 30px;
 	border-radius: 30px;
 	background: var(--accent);
 	width: 46px;
+	right: 5px;
+}
+
+input.attach-items,
+.upload-icon {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 24px;
+	width: 24px;
+	padding: 0;
+	border-radius: 50%;
+	left: 3px;
+}
+
+.send-message input.attach-items {
+	opacity: 0;
+	z-index: 2;
+	cursor: pointer;
 }
 
 .send-message button .svg {
@@ -41,4 +69,22 @@
 .two,
 .three {
 	fill: var(--primary-color);
+}
+
+.media-viewer {
+	height: 200px;
+	width: 100%;
+	padding: 0.5rem;
+	background: var(--active);
+	border-bottom: 1px solid var(--dark);
+	z-index: 2;
+	position: relative;
+	display: flex;
+	gap: 0.5rem;
+}
+
+.media-viewer * {
+	height: 100%;
+	width: 184px;
+	object-fit: cover;
 }

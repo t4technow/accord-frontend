@@ -1,18 +1,21 @@
-import ChatArea from "@/Components/ChatArea/ChatArea";
-import ServerCreation from "@/Components/Forms/ServerCreation";
-import RightBar from "@/Components/RightBar/RightBar";
-import ChannelsList from "@/Components/Sidebar/ChannelsList";
-import ServerList from "@/Components/Sidebar/ServerList";
-import Topbar from "@/Components/Topbar/Topbar";
-import { Server, User } from "@/lib/Types";
-
+// React and React Router hooks
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+// Components
+import ServerList from "@/Components/Sidebar/ServerList";
+import ServerCreation from "@/Components/Forms/ServerCreation";
+import ChannelsList from "@/Components/Sidebar/ChannelsList";
+import Topbar from "@/Components/Topbar/Topbar";
+import ChatArea from "@/Components/ChatArea/ChatArea";
+import RightBar from "@/Components/RightBar/RightBar";
+
+// Types
+import { User } from "@/lib/Types";
+
 const Home = () => {
-	const [servers, setServers] = useState<Server[]>([]);
-	const [currentServer, setCurrentServer] = useState<number | string>("dm");
 	const [currentChat, setCurrentChat] = useState<number | null>(null);
+	const [chatType, setChatType] = useState<string>("user");
 
 	const [active, setActive] = useState<string>("");
 	const [friends, setFriends] = useState<User[]>([]);
@@ -24,6 +27,7 @@ const Home = () => {
 
 	const location = useLocation();
 
+	// Function to show message, if any in redirect
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setShowMessage(false);
@@ -39,19 +43,16 @@ const Home = () => {
 			) : null}
 			<div className="sidebar">
 				<ServerList
-					servers={servers}
-					setServers={setServers}
-					currentServer={currentServer}
-					setCurrentServer={setCurrentServer}
 					showCreateServer={showCreateServer}
 					setShowCreateServer={setShowCreateServer}
 				/>
 				<ChannelsList
-					serverId={currentServer}
 					currentChat={currentChat}
 					setCurrentChat={setCurrentChat}
 					dm={dm}
 					setDm={setDm}
+					chatType={chatType}
+					setChatType={setChatType}
 				/>
 			</div>
 			<div className="main-content-wrapper">
@@ -59,19 +60,21 @@ const Home = () => {
 					currentChat={currentChat}
 					active={active}
 					setActive={setActive}
+					dm={dm}
+					setDm={setDm}
 				/>
 				<div className="main-content d-flex">
 					<ChatArea
 						currentChat={currentChat}
 						setCurrentChat={setCurrentChat}
-						serverId={currentServer}
 						friends={friends}
 						setFriends={setFriends}
 						active={active}
 						dm={dm}
 						setDm={setDm}
+						chatType={chatType}
 					/>
-					<RightBar currentChat={currentChat} serverId={currentServer} />
+					<RightBar currentChat={currentChat} chatType={chatType} />
 				</div>
 			</div>
 
@@ -79,9 +82,6 @@ const Home = () => {
 				<ServerCreation
 					showModal={showCreateServer}
 					setShowModal={setShowCreateServer}
-					setCurrentServer={setCurrentServer}
-					servers={servers}
-					setServers={setServers}
 				/>
 			)}
 		</div>

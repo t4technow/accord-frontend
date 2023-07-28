@@ -1,3 +1,4 @@
+// React hooks and types
 import {
 	ChangeEvent,
 	FormEvent,
@@ -6,13 +7,22 @@ import {
 	useEffect,
 	useState,
 } from "react";
+
+// Redux hooks and states stored in redux
+import { useDispatch, useSelector } from "react-redux";
+import { setServers, setCurrentServer } from "@/redux/server/ServerSlice";
+
+// Types
+import { RootState } from "@/lib/Types";
+
+// Styles and assets
 import "./ServerCreation.css";
 import gaming from "@/assets/images/gaming.svg";
 import education from "@/assets/images/study.svg";
 import science from "@/assets/images/door.svg";
 import entertainment from "@/assets/images/entertainment.svg";
 import axiosInstance from "@/config/axiosInstance";
-import { Server } from "@/lib/Types";
+import { useNavigate } from "react-router-dom";
 
 interface UpdatedData {
 	category: string;
@@ -20,31 +30,34 @@ interface UpdatedData {
 	avatar: File | null;
 }
 
+// Props & Peculiar Types
 interface Props {
 	showModal: boolean;
 	setShowModal: React.Dispatch<SetStateAction<boolean>>;
-	setCurrentServer: React.Dispatch<SetStateAction<number | string>>;
-	servers: Server[];
-	setServers: React.Dispatch<SetStateAction<Server[]>>;
 }
 
-const ServerCreation = ({
-	showModal,
-	setShowModal,
-	setCurrentServer,
-	servers,
-	setServers,
-}: Props) => {
+const ServerCreation = ({ showModal, setShowModal }: Props) => {
+	// Server List
+	const servers = useSelector((state: RootState) => state.server.servers);
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	// section state to handle multi page form
 	const [section, setSection] = useState<1 | 2>(1);
 
+	// States for uploading Image and Generating blob
 	const [selectedImage, setSelectedImage] = useState<File | null>(null);
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+	// States to handle form data
 	const [updatedData, setUpdatedData] = useState<UpdatedData>({
 		category: "",
 		name: "",
 		avatar: null,
 	});
 
+	// Function to generate blob for uploaded Image
 	useEffect(() => {
 		if (selectedImage) {
 			const imageUrl = URL.createObjectURL(selectedImage);
@@ -52,6 +65,7 @@ const ServerCreation = ({
 		}
 	}, [selectedImage]);
 
+	// Function to select server category and load next form page
 	const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
 		const selectedCategory = e.currentTarget.value;
 		setUpdatedData((prevData) => ({
@@ -61,6 +75,7 @@ const ServerCreation = ({
 		setSection(2);
 	};
 
+	// function to handle form submission
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -70,24 +85,29 @@ const ServerCreation = ({
 			avatar: selectedImage,
 		};
 		setUpdatedData(updatedDataCopy);
-		console.log(updatedDataCopy);
 
+		// create server
 		axiosInstance
 			.post("server/create/", updatedDataCopy, {
 				headers: { "Content-Type": "multipart/form-data" },
 			})
 			.then((res) => {
-				console.log("Server created successfully");
-				setCurrentServer(res.data.id);
-				if (servers) setServers([...servers, res.data]);
-				else setServers(res.data);
+				// set newly created server as current server
+				dispatch(setCurrentServer(res.data.id));
+				// Add new server to existing server list
+				if (servers) dispatch(setServers([...servers, res.data]));
+				else dispatch(setServers(res.data));
+				// Close server creation Form
 				setShowModal(false);
+
+				navigate(`/${res.data.id}`);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
+	// Function to handle image upload
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
 			setSelectedImage(e.target.files[0]);

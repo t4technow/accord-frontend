@@ -1,19 +1,23 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import Login from "@/Components/Login/Login";
-import "./Auth.css";
-import Register from "@/Components/Register/Register";
+// React & React Router hooks
 import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+// Components
+import Login from "@/Components/Login/Login";
+import Register from "@/Components/Register/Register";
+
+// Styles
+import "./Auth.css";
 
 const Auth = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
+	// Redirect any request to '/user/' to login page
 	useEffect(() => {
 		if (location.pathname === "/user/" || location.pathname === "/user") {
 			navigate("/user/login");
 		}
-
-		return () => {};
 	}, []);
 
 	return (

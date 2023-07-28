@@ -131,7 +131,7 @@
 	color: var(--hover-text);
 }
 
-.channel.dm .channel-avatar {
+.channel-avatar {
 	width: 32px;
 	height: 32px;
 	background: var(--dark);

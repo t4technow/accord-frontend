@@ -1,20 +1,28 @@
-import axiosInstance from "@/config/axiosInstance";
+// React hooks and types
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+// axios instance
+import axiosInstance from "@/config/axiosInstance";
 
 const Register = () => {
 	const navigate = useNavigate();
 
+	// state to handle loading
 	const [isValidating, setIsValidating] = useState(false);
+
 	const [errors, setErrors] = useState({
 		email: "",
 		username: "",
 		password: "",
 	});
+
+	// reference to input fields
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const usernameRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 
+	// Function to Validate form and set errors
 	function validateForm() {
 		let isValid = true;
 		let updatedErrors = {
@@ -45,10 +53,13 @@ const Register = () => {
 		return isValid;
 	}
 
+	// Function to register new user
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		// Set Loading animation
 		setIsValidating(true);
 		if (validateForm()) {
+			// Register user if form is valid
 			axiosInstance
 				.post("user/register/", {
 					email: emailRef.current?.value,
@@ -56,7 +67,11 @@ const Register = () => {
 					password: passwordRef.current?.value,
 				})
 				.then(() => {
+					// On Successful registration
+					// set loading to false
 					setIsValidating(false);
+
+					// Redirect user to login page along with message
 					navigate("login", {
 						state: {
 							title: "Registered successfully",
@@ -68,6 +83,7 @@ const Register = () => {
 					console.log(err);
 					if (err.response && err.response.data) {
 						setErrors(err.response.data);
+						setIsValidating(false);
 					}
 					setIsValidating(false);
 				});

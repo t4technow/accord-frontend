@@ -10,6 +10,11 @@
 	overflow-x: hidden;
 	margin-inline: 0.2rem;
 }
+
+.chat-area:has(.send-message .media-viewer) .messages {
+	max-height: calc(100vh - 316px);
+}
+
 .messages::-webkit-scrollbar {
 	width: 8px;
 	display: none;
@@ -60,34 +65,28 @@
 	margin-bottom: 4px;
 	position: relative;
 	z-index: 1;
+	display: flex;
+	gap: 0.4rem;
 }
 
-.message::after {
+.message.after::after {
 	content: "";
 	position: absolute;
 	bottom: 0;
 	border-width: 10px;
 	border-style: solid;
 	z-index: 0;
-	display: none;
 	border-radius: 2px;
 }
 
-.send.message::after {
+.send.message.after::after {
 	right: -9px;
 	border-color: transparent transparent var(--active) transparent;
 }
 
-.received.message::after {
+.received.message.after::after {
 	left: -9px;
 	border-color: transparent transparent var(--dark) transparent;
-}
-
-.send + .send::after,
-.send:not(:has(+ .send))::after,
-.received + .received::after,
-.received:not(:has(+ .received))::after {
-	display: block;
 }
 
 .send.message {
@@ -97,6 +96,73 @@
 
 .received.message {
 	background: var(--dark);
+}
+
+.message-meta {
+	display: flex;
+	position: relative;
+	width: 22px;
+}
+
+.message-meta span.timestamp {
+	font-size: 0.6875rem;
+	align-self: flex-end;
+	position: absolute;
+	bottom: -5px;
+	color: var(--primary-color);
+}
+
+.orderby-date {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: sticky;
+	top: 0;
+}
+
+.date {
+	padding: 0.3rem 1rem;
+	font-size: 12px;
+	background: var(--dark-secondary);
+	border-radius: 20px;
+	text-align: center;
+}
+
+.group .message-holder:has(.send) {
+	flex-direction: row-reverse;
+}
+
+.group .message-holder {
+	display: flex;
+	gap: 1rem;
+	align-items: flex-end;
+}
+
+.group .message-holder:has(.received.message) {
+	margin-inline: 3rem;
+}
+
+.group .profile-pic {
+	margin-inline: -3rem;
+}
+
+.group .sender-name {
+	position: absolute;
+	top: -12px;
+	background: var(--dark-secondary);
+	color: var(--primary-color);
+	width: 100%;
+	left: 0;
+	font-size: 12px;
+	font-weight: 600;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	padding: 0px 6px;
+	z-index: 0;
+}
+
+.group .message.received.after {
+	margin-inline: 3rem;
 }
 
 .friends-list_item {
@@ -113,4 +179,62 @@
 
 .chat-area .channel-list_item {
 	margin-right: 8px;
+}
+
+.message:has(.message-image) {
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.message-image {
+	width: 150px;
+	height: 200px;
+	object-fit: cover;
+	background: var(--accent);
+}
+
+.message-link {
+	color: var(--link-color);
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.message:has(.site-info) {
+	flex-direction: column;
+}
+
+.messages-holder {
+	position: relative;
+	height: 100%;
+}
+
+.view-file {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(2px);
+	z-index: 5;
+}
+
+.view-file img,
+.view-file video {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.view-file .close-modal {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: none;
+	display: flex;
+}
+
+.view-file .close-modal svg.closeIcon-pSJDFz path {
+	fill: var(--hover-text);
 }

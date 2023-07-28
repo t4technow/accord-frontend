@@ -1,10 +1,16 @@
+// React Router Components
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import "./App.css";
+// Protected Route
+import ProtectedRoute from "./utils/ProtectedRoute";
+
+// Pages
 import Home from "./page/Home";
 import Auth from "./page/Auth";
-import ProtectedRoute from "./utils/ProtectedRoute";
 import VerifyEmail from "./page/VerifyEmail";
+
+// Styles
+import "./App.css";
 
 const App = () => {
 	return (
@@ -12,7 +18,8 @@ const App = () => {
 			<Routes>
 				<Route path="/user/*" element={<Auth />} />
 				<Route element={<ProtectedRoute />}>
-					<Route element={<Home />} path="/" />
+					{/* Protected Routes: only logged in users will be able to access */}
+					<Route element={<Home />} path="/*" />
 				</Route>
 				<Route element={<VerifyEmail />} path="/verify-email/:uid/:token" />
 			</Routes>

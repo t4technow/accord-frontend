@@ -35,26 +35,31 @@ export interface User {
 	friend_profile?: UserProfile;
     date_joined: Date;
     type?: string;
+    name?: string
+    is_admin?: boolean;
+    avatar?: string;
+    chat_type?: 'user' | 'group';
 }
 
-interface UserState {
-    isAuthenticated?: boolean,
-    userId?: number,
-    username?: string,
-    access?: string,
-    refresh?: string,
-}
-
-export interface RootState {
-    user: Partial<UserState>,
+export interface Group {
+    id: number;
+    name: string;
+	avatar?: string;
 }
 
 export interface Message {
 	message: string;
+    files: { file: File; fileName: string, fileType?: "image" | "video" | "application"}[];
+    file?: string;
+    file_type?: "image" | "video" | "application";
 	username: string;
 	sender: number;
+    profilePic?: string;
+    chatType?: 'user' | 'group'
 	receiver?: number;
-	timestamp: Date;
+	timestamp: string;
+    is_group_chat: boolean
+    group?: number
 }
 
 export interface AccessDetails {
@@ -65,3 +70,26 @@ export interface AccessDetails {
 	user_id: number;
 	username: string;
 }
+
+
+// State Interfaces
+interface UserState {
+    isAuthenticated?: boolean,
+    userId?: number,
+    username?: string,
+    access?: string,
+    refresh?: string,
+}
+
+export type CurrentServer = number | string;
+
+export interface ServerState {
+  servers: Server[];
+  currentServer: CurrentServer;
+}
+
+export interface RootState {
+    user: Partial<UserState>,
+    server: Partial<ServerState>
+}
+

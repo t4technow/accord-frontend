@@ -118,3 +118,12 @@ h4.user-email {
 	display: flex;
 	gap: 0.5rem;
 }
+
+.members-list {
+	padding: 1rem 0.5rem;
+}
+.members-list .sub-head {
+	justify-content: space-between;
+	padding-inline: 0.5rem;
+	margin-bottom: 0.5rem;
+}
