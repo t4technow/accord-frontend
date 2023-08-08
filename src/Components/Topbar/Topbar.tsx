@@ -6,6 +6,7 @@ import {
 	useEffect,
 	useRef,
 	SetStateAction,
+	useCallback,
 } from "react";
 
 // Axios Instance and types
@@ -17,21 +18,41 @@ import ImageSelector from "../ImageSelector/ImageSelector";
 import FriendList from "../User/FriendList";
 
 // Types
-import { User } from "@/lib/Types";
+import { Group, Message, RootState, Server, User } from "@/lib/Types";
 
 // Styles
 import "./Topbar.css";
+import { getGroupInfo, getServerInfo, getUserInfo } from "@/services/apiGET";
+import { useSelector } from "react-redux";
 
 // Props and peculiar types
 interface Props {
 	currentChat: number | null;
+	chatType: string;
 	active: string;
 	setActive: React.Dispatch<SetStateAction<string>>;
-	dm: User[];
-	setDm: React.Dispatch<SetStateAction<User[]>>;
+	searchQuery: string;
+	setSearchQuery: React.Dispatch<SetStateAction<string>>;
+	searchResults: number[];
+	setSearchResults: React.Dispatch<SetStateAction<number[]>>;
+	setHighlightedMessageIndex: React.Dispatch<SetStateAction<number>>;
+	messages: Message[];
+	setShowVideo: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
+const Topbar = ({
+	currentChat,
+	chatType = "user",
+	active,
+	setActive,
+	searchQuery,
+	setSearchQuery,
+	searchResults,
+	setSearchResults,
+	setHighlightedMessageIndex,
+	messages,
+	setShowVideo,
+}: Props) => {
 	const [section, setSection] = useState<1 | 2>(1);
 	const [friends, setFriends] = useState<User[]>([]);
 	const [selectedMembers, setSelectedMembers] = useState<User[] | null>([]);
@@ -46,6 +67,43 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
+
+	const [recipient, setRecipient] = useState<User | Group | Server | null>(null);
+
+	const onlineUsers = useSelector(
+		(state: RootState) => state.onlineUsers.users
+	);
+
+	const serverId = useSelector((state: RootState) => state.server.currentServer)
+
+	const fetchChatInfo = async (chatId: number) => {
+		try {
+			if (chatType === "user") {
+				const userInfo = await getUserInfo(chatId);
+				if (userInfo) setRecipient(userInfo);
+			} else if (chatType === "group") {
+				const groupInfo = await getGroupInfo(chatId);
+				if (groupInfo) setRecipient(groupInfo);
+			} else if (chatType === "channel") {
+				const serverInfo = await getServerInfo(serverId!);
+				if (serverInfo) setRecipient(serverInfo);
+			}
+		} catch (error) {
+			console.warn("Error fetching chat info", error as Error);
+		}
+	};
+	useEffect(() => {
+		if (!currentChat) return;
+		fetchChatInfo(currentChat);
+		setSearchQuery("");
+		setSearchResults([]);
+		setHighlightedMessageIndex(-1);
+	}, [currentChat, chatType]);
+
+	// type guard function to check if it's a User
+	function isUser(recipient: User | Group): recipient is User {
+		return "profile" in recipient;
+	}
 
 	// change state to toggle shadow to friends-list section if scrolled
 	const handleScroll = () => {
@@ -74,6 +132,7 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 				})
 				.then((res: AxiosResponse) => {
 					console.log(res);
+					setShowCreateGroup(false);
 				})
 				.catch((err: AxiosError) => {
 					console.log(err);
@@ -111,7 +170,7 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 	// Function and to search users
 	const [filteredList, setFilteredList] = useState<User[]>(friends);
 	const searchQueryRef = useRef<HTMLInputElement>(null);
-	const searchUsers = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const searchUsers = () => {
 		const query = searchQueryRef?.current?.value.trim();
 		const filtered = friends.filter(
 			(friend) =>
@@ -128,9 +187,42 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 		);
 		setSelectedMembers(
 			selectedMembers &&
-				selectedMembers.filter((user) => user.friend_id !== friend.friend_id)
+			selectedMembers.filter((user) => user.friend_id !== friend.friend_id)
 		);
 	};
+
+	// Handle message search
+	const handleSearch = useCallback(() => {
+		if (searchQuery.trim() === "") {
+			setSearchResults([]);
+			setHighlightedMessageIndex(-1);
+		} else {
+			const results: number[] = [];
+			messages.forEach((message, index) => {
+				if (message.message.toLowerCase().includes(searchQuery.toLowerCase())) {
+					results.push(index);
+				}
+			});
+			setSearchResults(results.reverse());
+			setHighlightedMessageIndex(results.length > 0 ? results.length - 1 : -1);
+		}
+	}, [searchQuery]);
+
+	const handlePrevSearchResult = useCallback(() => {
+		if (searchResults.length > 0) {
+			setHighlightedMessageIndex((prevIndex) =>
+				prevIndex > 0 ? prevIndex - 1 : searchResults.length - 1
+			);
+		}
+	}, [searchResults]);
+
+	const handleNextSearchResult = useCallback(() => {
+		if (searchResults.length > 0) {
+			setHighlightedMessageIndex((prevIndex) =>
+				prevIndex < searchResults.length - 1 ? prevIndex + 1 : 0
+			);
+		}
+	}, [searchResults]);
 
 	return (
 		<div className="topbar d-flex">
@@ -182,9 +274,8 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 							Pending
 						</li>
 						<li
-							className={`topbar-item ${
-								active === "suggestions" ? "active" : ""
-							}`}
+							className={`topbar-item ${active === "suggestions" ? "active" : ""
+								}`}
 							onClick={() => setActive("suggestions")}
 						>
 							Suggestion
@@ -196,7 +287,50 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 							Blocked
 						</li>
 					</ul>
-				) : null}
+				) : (
+					<div className="topbar-menu d-flex">
+						<div className="topbar-header d-flex">
+							{recipient && (
+								<>
+									{recipient?.avatar ||
+										(isUser(recipient) && (recipient as User).profile?.avatar) ? (
+										<img
+											className="channel-avatar avatar"
+											src={
+												chatType === "user" && isUser(recipient)
+													? recipient.profile?.avatar
+													: recipient.avatar
+											}
+											alt=""
+										/>
+									) : (
+										<div className="channel-avatar avatar name">
+											<span className="head">
+												{chatType === "user" && isUser(recipient)
+													? recipient?.username.charAt(0).toUpperCase()
+													: recipient?.name?.charAt(0).toUpperCase()}
+											</span>
+										</div>
+									)}
+									<div className="meta">
+										<span className="channel-name">
+											{chatType === "user" && isUser(recipient)
+												? recipient?.username
+												: recipient?.name}
+										</span>
+										{chatType === "user" && (
+											<div className="online-status">
+												{onlineUsers?.includes(recipient.id + "")
+													? "online"
+													: "offline"}
+											</div>
+										)}
+									</div>
+								</>
+							)}
+						</div>
+					</div>
+				)}
 			</div>
 			<div className="right-side">
 				<ul className="action-menu">
@@ -234,9 +368,8 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 							>
 								<form onSubmit={handleSubmit}>
 									<div
-										className={`header ${
-											section === 2 && isScrolled ? "shadow" : ""
-										}`}
+										className={`header ${section === 2 && isScrolled ? "shadow" : ""
+											}`}
 									>
 										<button
 											className="close-modal"
@@ -258,9 +391,8 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 											</svg>
 										</button>
 										<h2
-											className={`modal-heading light ${
-												section === 2 && "small"
-											}`}
+											className={`modal-heading light ${section === 2 && "small"
+												}`}
 										>
 											{section === 1 ? "Create a group" : "Select friends"}
 										</h2>
@@ -333,14 +465,26 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 											ref={friendsListRef}
 											onScroll={handleScroll}
 										>
-											<FriendList
-												users={filteredList.length > 0 ? filteredList : friends}
-												selection={true}
-												selectedList={selectedMembers}
-												setSelectedList={setSelectedMembers}
-												selectedIds={selectedIds}
-												setSelectedIds={setSelectedIds}
-											/>
+											{filteredList.length > 0 ? (
+												<FriendList
+													users={filteredList}
+													selection={true}
+													selectedList={selectedMembers}
+													setSelectedList={setSelectedMembers}
+													selectedIds={selectedIds}
+													setSelectedIds={setSelectedIds}
+												/>
+											) : (
+												<p
+													style={{
+														textAlign: "center",
+														color: "var(--primary-color)",
+													}}
+												>
+													{" "}
+													No user found{" "}
+												</p>
+											)}
 										</ul>
 									)}
 									<div className="modal-footer dark">
@@ -361,7 +505,47 @@ const Topbar = ({ currentChat, active, setActive, dm, setDm }: Props) => {
 								</form>
 							</div>
 						</>
-					) : null}
+					) : (
+						<>
+							<div className="icon-wrapper" onClick={() => setShowVideo(true)}>
+								<svg
+									x="0"
+									y="0"
+									className="icon-2xnN2Y"
+									aria-hidden="true"
+									role="img"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M21.526 8.149C21.231 7.966 20.862 7.951 20.553 8.105L18 9.382V7C18 5.897 17.103 5 16 5H4C2.897 5 2 5.897 2 7V17C2 18.104 2.897 19 4 19H16C17.103 19 18 18.104 18 17V14.618L20.553 15.894C20.694 15.965 20.847 16 21 16C21.183 16 21.365 15.949 21.526 15.851C21.82 15.668 22 15.347 22 15V9C22 8.653 21.82 8.332 21.526 8.149Z"
+									></path>
+								</svg>
+							</div>
+							<div className="secondary-sidebar_header search-messages-holder">
+								<input
+									type="text"
+									placeholder="search message"
+									className="search-messages"
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+								/>
+								<div className="search-args">
+									{searchResults.length > 0 && (
+										<>
+											<button onClick={handlePrevSearchResult}>{`<`} </button>
+											<button onClick={handleNextSearchResult}>{`>`}</button>
+										</>
+									)}
+									<button className="search-button" onClick={handleSearch}>
+										search
+									</button>
+								</div>
+							</div>
+						</>
+					)}
 				</ul>
 			</div>
 		</div>

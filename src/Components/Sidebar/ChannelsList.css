@@ -106,6 +106,25 @@
 	padding: 1px 0px;
 }
 
+.friends-list_item_info {
+	position: relative;
+}
+
+.online-indicator {
+	position: absolute;
+	height: 10px;
+	width: 10px;
+	background-color: #404249;
+	bottom: 0;
+	border-radius: 50%;
+	outline: 4px solid #2b2d31;
+	left: 23px;
+}
+
+.online-indicator.online {
+	background: var(--green);
+}
+
 .channel {
 	display: flex;
 	align-items: center;

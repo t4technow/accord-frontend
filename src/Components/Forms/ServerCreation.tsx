@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setServers, setCurrentServer } from "@/redux/server/ServerSlice";
 
 // Types
-import { RootState } from "@/lib/Types";
+import { RootState, ServerCreationInfo } from "@/lib/Types";
 
 // Styles and assets
 import "./ServerCreation.css";
@@ -21,14 +21,9 @@ import gaming from "@/assets/images/gaming.svg";
 import education from "@/assets/images/study.svg";
 import science from "@/assets/images/door.svg";
 import entertainment from "@/assets/images/entertainment.svg";
-import axiosInstance from "@/config/axiosInstance";
-import { useNavigate } from "react-router-dom";
 
-interface UpdatedData {
-	category: string;
-	name: string;
-	avatar: File | null;
-}
+import { useNavigate } from "react-router-dom";
+import { createServerRequest } from "@/services/apiPOST";
 
 // Props & Peculiar Types
 interface Props {
@@ -51,7 +46,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
 
 	// States to handle form data
-	const [updatedData, setUpdatedData] = useState<UpdatedData>({
+	const [updatedData, setUpdatedData] = useState<ServerCreationInfo>({
 		category: "",
 		name: "",
 		avatar: null,
@@ -75,44 +70,43 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 		setSection(2);
 	};
 
-	// function to handle form submission
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const formData = new FormData(e.currentTarget);
-		const updatedDataCopy: UpdatedData = {
-			...updatedData,
-			name: formData.get("server-name") as string,
-			avatar: selectedImage,
-		};
-		setUpdatedData(updatedDataCopy);
-
-		// create server
-		axiosInstance
-			.post("server/create/", updatedDataCopy, {
-				headers: { "Content-Type": "multipart/form-data" },
-			})
-			.then((res) => {
-				// set newly created server as current server
-				dispatch(setCurrentServer(res.data.id));
-				// Add new server to existing server list
-				if (servers) dispatch(setServers([...servers, res.data]));
-				else dispatch(setServers(res.data));
-				// Close server creation Form
-				setShowModal(false);
-
-				navigate(`/${res.data.id}`);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	// Function to handle image upload
 	const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
 			setSelectedImage(e.target.files[0]);
 		}
 	};
+
+	// create server
+	const handleServerCreation = async (serverInfo: ServerCreationInfo) => {
+		const createServerResponse = await createServerRequest(serverInfo)
+		if (createServerResponse) {
+			dispatch(setCurrentServer(createServerResponse.id));
+			// Add new server to existing server list
+			if (servers) dispatch(setServers([...servers, createServerResponse]));
+			else dispatch(setServers(createServerResponse));
+
+		}
+		setShowModal(false);
+
+		navigate(`/${createServerResponse.id}`);
+	}
+
+	// function to handle form submission
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+		const updatedDataCopy: ServerCreationInfo = {
+			...updatedData,
+			name: formData.get("server-name") as string,
+			avatar: selectedImage,
+		};
+		setUpdatedData(updatedDataCopy);
+
+		handleServerCreation(updatedData)
+	};
+
+
 
 	return (
 		<div className="overlay">

@@ -67,6 +67,7 @@
 	z-index: 1;
 	display: flex;
 	gap: 0.4rem;
+	max-width: calc(100vw - 380px);
 }
 
 .message.after::after {
@@ -102,6 +103,7 @@
 	display: flex;
 	position: relative;
 	width: 22px;
+	align-self: flex-end;
 }
 
 .message-meta span.timestamp {
@@ -118,6 +120,8 @@
 	justify-content: center;
 	position: sticky;
 	top: 0;
+	z-index: 2;
+	margin-block: 1rem;
 }
 
 .date {
@@ -126,6 +130,10 @@
 	background: var(--dark-secondary);
 	border-radius: 20px;
 	text-align: center;
+}
+
+.messages-holder {
+	position: relative;
 }
 
 .group .message-holder:has(.send) {
@@ -237,4 +245,86 @@
 
 .view-file .close-modal svg.closeIcon-pSJDFz path {
 	fill: var(--hover-text);
+}
+
+.message:has(.file-link) {
+	flex-direction: column;
+}
+
+.message .file-link {
+	display: flex;
+	flex-direction: column;
+}
+
+.file-thumb-holder {
+	position: relative;
+}
+
+.file-download {
+	position: absolute;
+	color: var(--white);
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(.5px);
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.message .file-thumb-holder .file-thumb {
+	height: 100px;
+	width: 200px;
+	object-fit: cover;
+	object-position: top;
+}
+
+.file-name {
+	display: flex;
+	gap: 0.5rem;
+	height: 34px;
+	align-items: center;
+	margin-top: 0.5rem;
+}
+
+.file-name .icon {
+	display: flex;
+	align-items: center;
+}
+
+.file-name .icon img {
+	height: 30px;
+}
+
+.file-name .file-download {
+	position: relative;
+	background: none;
+	color: var(--hover-text);
+}
+
+.messages-holder .messages .message.highlight {
+	color: #ffff99;
+}
+
+/* CSS styles for currently displayed search result */
+.messages-holder .messages .message.current-result {
+	color: tomato;
+}
+
+.message-content span {
+	display: inline-block;
+	align-items: center;
+	white-space: break-spaces;
+	overflow-wrap: break-word;
+}
+
+.message-content {
+	width: calc(100% - 21px);
+	white-space: break-spaces;
+	overflow-wrap: break-word;
+	flex: 1;
+}
+
+.message-content span img {
+	position: relative;
+	top: 6px;
 }

@@ -1,15 +1,16 @@
 // React types
-import { SetStateAction } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 
 // Axios instance and constants
 import axiosInstance from "@/config/axiosInstance";
 import { imageBase } from "@/config/Constants";
 
 // Types
-import { User } from "@/lib/Types";
+import { RootState, User } from "@/lib/Types";
+import { useSelector } from "react-redux";
 
 interface Props {
-	users: User[];
+	users: User[] | undefined;
 	friends?: User[] | null;
 	dm?: User[];
 	setDm?: React.Dispatch<SetStateAction<User[]>>;
@@ -47,6 +48,14 @@ const FriendList = ({
 	setChatType,
 	members = false,
 }: Props) => {
+
+	const [localUsers, setLocalUsers] = useState<User[] | undefined>([]);
+	const onlineUsers = useSelector((state: RootState) => state.onlineUsers.users)
+
+	useEffect(() => {
+		setLocalUsers(users);
+	}, [users]);
+
 	const handleSelection = (friend: User) => {
 		if (
 			selection &&
@@ -66,7 +75,6 @@ const FriendList = ({
 			}
 		} else if (friendsList && !selection) {
 			setCurrentChat && setCurrentChat(friend.id);
-			console.log(friend, "[[[[[[sss[");
 		}
 		setChatType && friend.chat_type && setChatType(friend.chat_type);
 	};
@@ -78,29 +86,26 @@ const FriendList = ({
 
 	return (
 		<>
-			{users?.map((friend, i) => (
-				<>
+			{localUsers?.map((friend, i) => (
+				<React.Fragment key={
+					friend.username
+						? friend.username
+						: friend.name
+				}>
 					<li
 						className="channel-list_item"
-						key={
-							friendsList
-								? friend.chat_type && friend.chat_type + friend.id
-								: friend.chat_type &&
-								  friend.friend_id &&
-								  friend.chat_type + friend.friend_id
-								? friend.friend_id && friend.friend_id
-								: friend.id
-						}
 						onClick={() => handleSelection(friend)}
 					>
 						<div
-							className={`channel dm friends-list_item ${
-								currentChat === friend.id && friend.chat_type === chatType
-									? "active"
-									: ""
-							} `}
+							className={`channel dm friends-list_item ${currentChat === friend.id && friend.chat_type === chatType
+								? "active"
+								: ""
+								} `}
 						>
 							<div className="friends-list_item_info">
+								{friend.chat_type === 'user' &&
+									<div className={`online-indicator ${onlineUsers?.includes(friend.id + '') ? 'online' : 'offline'}`}></div>
+								}
 								{friend.chat_type === "user" || !friend.chat_type ? (
 									<>
 										{friend.profile?.avatar || friend.friend_profile?.avatar ? (
@@ -244,7 +249,7 @@ const FriendList = ({
 							)}
 						</div>
 					</li>
-				</>
+				</React.Fragment>
 			))}
 		</>
 	);

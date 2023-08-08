@@ -7,6 +7,7 @@ import { Store } from "./redux/Store.ts";
 import App from "./App.tsx";
 import "./index.css";
 
+
 ReactDOM.createRoot(document.getElementById("accord")!).render(
 	<Provider store={Store}>
 		<App />

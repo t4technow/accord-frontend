@@ -13,10 +13,11 @@ import axiosInstance from "@/config/axiosInstance";
 import FriendList from "../User/FriendList";
 
 // Types
-import { Channel, RootState, User } from "@/lib/Types";
+import { Channel, CurrentServer, RootState, User } from "@/lib/Types";
 
 // Styles
 import "./ChannelsList.css";
+import { getChannels, getChatThreads, getUserInfo } from "@/services/apiGET";
 
 // Props & Peculiar Types
 type Props = {
@@ -27,6 +28,7 @@ type Props = {
 	setDm: React.Dispatch<SetStateAction<User[]>>;
 	chatType?: string;
 	setChatType: React.Dispatch<SetStateAction<string>>;
+	onlineStatusSocket: WebSocket | null;
 };
 
 const ChannelsList = ({
@@ -36,6 +38,7 @@ const ChannelsList = ({
 	setDm,
 	chatType,
 	setChatType,
+	onlineStatusSocket,
 }: Props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -49,14 +52,19 @@ const ChannelsList = ({
 	);
 
 	const [channels, setChannels] = useState<Channel[]>([]);
-
 	const [currentUser, setCurrentUser] = useState<User | null>(null);
 
 	// Function to get details of logged in user
+	const fetchUserInfo = async (userId: number) => {
+		try {
+			const userInfo = await getUserInfo(userId)
+			if (userInfo) setCurrentUser(userInfo)
+		} catch (error) {
+			console.log('Error fetching User Info', error)
+		}
+	}
 	useEffect(() => {
-		axiosInstance
-			.get("user_info/" + loggedUserId)
-			.then((res) => setCurrentUser(res.data));
+		if (loggedUserId) fetchUserInfo(loggedUserId)
 	}, []);
 
 	// Function to logout
@@ -72,6 +80,7 @@ const ChannelsList = ({
 				localStorage.removeItem("refresh_token");
 				axiosInstance.defaults.headers["Authorization"] = null;
 
+				onlineStatusSocket?.close()
 				// user details from redux user state & redirect to login
 				dispatch(logoutReducer());
 				navigate("/user/login");
@@ -79,23 +88,26 @@ const ChannelsList = ({
 	};
 
 	// Function to get chats of current user
-	useEffect(() => {
+	const fetchServerInfo = async (serverId: CurrentServer) => {
 		if (serverId === "dm") {
 			// Get dms and groups if no server is selected
-			axiosInstance.get<User[]>("get-chat-threads/").then((res) => {
-				console.log(res.data);
-				if (typeof res.data != typeof "string") {
-					setDm(res.data);
-				}
-			});
+			const chats = await getChatThreads()
+			if (chats && typeof chats != typeof "string") {
+				setDm(chats);
+				setCurrentChat(null)
+			}
 		} else {
 			// Get channels of the selected server
-			axiosInstance
-				.get<Channel[]>(`channels/${serverId}`)
-				.then((res) => setChannels(res.data));
+			const channels = await getChannels(serverId)
+			if (channels) {
+				setChannels(channels)
+				setCurrentChat(channels[0].id)
+			}
 		}
+	}
 
-		return () => {};
+	useEffect(() => {
+		fetchServerInfo(serverId!)
 	}, [serverId]);
 
 	return (
@@ -159,7 +171,10 @@ const ChannelsList = ({
 									<li
 										className="channel-list_item"
 										key={filteredChannel.id}
-										onClick={() => setCurrentChat(filteredChannel.id)}
+										onClick={() => {
+											setChatType('channel')
+											setCurrentChat(filteredChannel.id)
+										}}
 									>
 										<div
 											className={

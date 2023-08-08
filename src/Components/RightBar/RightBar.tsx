@@ -1,23 +1,19 @@
-// React Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFriendsList } from "@/redux/chat/friendsSlice";
 
-// Redux hooks and states
-import { useSelector } from "react-redux";
-
-// Axios Instance
-import axiosInstance from "@/config/axiosInstance";
+import { getFriends, getGroupMembers, getMutualFriends, getUserInfo } from "@/services/apiGET";
 
 // Helper functions
 import { formatDate } from "@/Helper/FormatDate";
 
-// Components
 import FriendList from "../User/FriendList";
 
 // Types
 import { RootState, User } from "@/lib/Types";
 
-// Styles
 import "./RightBar.css";
+import { addToGroupRequest } from "@/services/apiPOST";
 
 // Props & Peculiar Types
 interface Props {
@@ -30,36 +26,107 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 	const serverId = useSelector(
 		(state: RootState) => state.server.currentServer
 	);
+	const friends = useSelector((state: RootState) => state.friends.friendsList)
+	const [selectedMembers, setSelectedMembers] = useState<User[] | null>([]);
+	const [selectedIds, setSelectedIds] = useState<number[] | null>([]);
+	const [nonMembers, setNonMembers] = useState<User[] | undefined>([]);
 
 	const [user, setUser] = useState<User | null>(null);
-	const [mutualFriends, setMutualFriends] = useState<User[]>([]);
+	const [mutualFriends, setMutualFriends] = useState<User[] | null>(null);
 	const [showMutualFriends, setShowMutualFriends] = useState<boolean>(false);
 
 	const [members, setMembers] = useState<User[]>([]);
 
-	// Function to get details of the user of current chat along with mutual friends
+	const [showSubmenu, setShowSubmenu] = useState<boolean>(false);
+	const [showAddFriends, setShowAddFriends] = useState<boolean>(false)
+
+	// const [loading, setLoading] = useState<boolean>(false)
+	// const [popUpMessage, setPopUpMessage] = useState<string>('')
+
+	const dispatch = useDispatch()
+
+
+	// Function to get details of the user of current chat along with mutual friends/ group members
+	const fetchData = async () => {
+		if (serverId !== "dm" || !currentChat) return;
+
+		if (chatType === "user") {
+			const userInfo = await getUserInfo(currentChat);
+			if (userInfo) setUser(userInfo);
+
+			const mutualFriendsData = await getMutualFriends(currentChat);
+			if (mutualFriendsData) setMutualFriends(mutualFriendsData);
+
+		} else if (chatType === "group") {
+			const groupMembers = await getGroupMembers(currentChat);
+			if (groupMembers) setMembers(groupMembers);
+		}
+	};
+
 	useEffect(() => {
-		if (serverId === "dm" && currentChat && chatType === "user") {
-			axiosInstance.get(`user_info/${currentChat}/`).then((res) => {
-				setUser(res.data);
-			});
-			axiosInstance.get(`mutual-friends/${currentChat}/`).then((res) => {
-				setMutualFriends(res.data);
-			});
+		fetchData();
+	}, [currentChat, chatType, serverId]);
+
+
+	const addFriends = async () => {
+		try {
+			setShowAddFriends(!showAddFriends);
+
+			if (!friends?.length) {
+				const friendsList = await getFriends()
+				if (friendsList) dispatch(setFriendsList(friendsList));
+			}
+
+			const memberUserNames = members.map((member) => member.username);
+			const nonMembersList = friends?.filter(
+				(friend) => !memberUserNames.includes(friend.username)
+			);
+
+			setNonMembers(nonMembersList);
+		} catch (error) {
+			console.log("Error adding friends:", error);
+		}
+	};
+
+
+	const friendsListRef = useRef<HTMLUListElement>(null);
+	// // change state to toggle shadow to friends-list section if scrolled
+	// const handleScroll = () => {
+	// 	if (friendsListRef.current) {
+	// 		// set to true if scrolled
+	// 		setIsScrolled(friendsListRef.current.scrollTop > 0);
+	// 	}
+	// };
+
+	useEffect(() => {
+		console.log("RightBar selectedIds:", selectedIds);
+	}, [selectedIds]);
+
+	const addToGroup = async () => {
+		// setLoading(true);
+
+		if (!selectedIds || selectedIds.length === 0 || !currentChat) {
+			// setLoading(false);
+			// setPopUpMessage("Please select at least 1 member");
+			return;
 		}
 
-		if (serverId === "dm" && currentChat && chatType === "group") {
-			axiosInstance
-				.get(`group-info/${currentChat}/`)
-				.then((res) => {
-					console.log(res.data);
-					setMembers(res.data);
-				})
-				.catch((err) => console.log(err));
-		}
+		try {
+			const responseData = await addToGroupRequest(currentChat, selectedIds);
+			console.log(responseData);
 
-		return () => {};
-	}, [currentChat, chatType]);
+			const groupMembers = await getGroupMembers(currentChat);
+			if (groupMembers) setMembers(groupMembers);
+			setShowSubmenu(false);
+			setShowAddFriends(false);
+		} catch (error) {
+			console.error("Error while adding members to group:", error);
+		} finally {
+			// setLoading(false);
+		}
+	};
+
+	const friendListKey = nonMembers?.length;
 
 	return (
 		<div className="right-side-bar">
@@ -110,7 +177,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 						</div>
 
 						<>
-							{mutualFriends.length > 0 ? (
+							{mutualFriends && mutualFriends.length > 0 ? (
 								<div className="mutual-friends m-1 mt-0">
 									<button
 										className="element-toggler sub-head"
@@ -149,8 +216,54 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 				<div className="members-list">
 					<h4 className="sub-head d-flex">
 						<span className="header">Members</span>
-						<span className="add-users"> + </span>
+						<span className="add-users" onClick={() => {
+							setShowSubmenu(!showSubmenu)
+							setShowAddFriends(false)
+						}}> + </span>
 					</h4>
+					<div className={`submenu drop-down ${showSubmenu ? 'show' : ''}`}>
+						<li className="submenu_item">
+							<span className="submenu_item__link" onClick={() => addFriends()}>
+								Add friends
+							</span>
+							<div className={`submenu_dropdown ${showAddFriends ? 'show' : ''}`}>
+								<ul
+									className="friends-list"
+									ref={friendsListRef}
+								// onScroll={handleScroll}
+								>
+
+									<FriendList
+										key={friendListKey}
+										users={nonMembers}
+										selection={true}
+										selectedList={selectedMembers}
+										setSelectedList={setSelectedMembers}
+										selectedIds={selectedIds}
+										setSelectedIds={setSelectedIds}
+									/>
+								</ul>
+								{
+									nonMembers && nonMembers?.length > 0 ?
+										<button className="btn-primary" onClick={() => addToGroup()}>Add to group</button>
+										:
+										<button className="btn-primary dark">All your friends are in the group</button>
+
+								}
+							</div>
+						</li>
+						<li className="submenu_item">
+							<span className="submenu_item__link">
+								invite to group
+							</span>
+						</li>
+						<li className="submenu_item">
+
+							<button className="btn-primary">
+								copy invite link
+							</button>
+						</li>
+					</div>
 					<FriendList users={members} friendsList={true} members={true} />
 				</div>
 			)}

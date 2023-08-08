@@ -7,7 +7,7 @@ const initialState: ServerState = {
 };
 
 const serverSlice = createSlice({
-  name: 'serverAndCurrentServer',
+  name: 'servers',
   initialState,
   reducers: {
     setServers: (state, action: PayloadAction<Server[]>) => {

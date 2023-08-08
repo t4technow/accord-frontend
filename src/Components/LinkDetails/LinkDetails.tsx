@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import cheerio from "cheerio";
+// import cheerio from "cheerio";
 
 interface SiteDetails {
 	title?: string;

@@ -1,0 +1,35 @@
+.video-call-container {
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  inset: 0;
+  z-index: 6;
+}
+
+.videos-container {
+  width: 100%;
+  background: var(--accent);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .3em;
+}
+
+.video-holder {
+  background: #000;
+  height: 230px;
+  place-self: end;
+}
+
+.video-holder:last-of-type {
+  place-self: start;
+}
+
+.video-controls {
+  display: flex;
+  height: 46px;
+  background-color: #000;
+  color: aliceblue;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}

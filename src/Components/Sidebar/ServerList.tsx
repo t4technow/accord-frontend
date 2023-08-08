@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setServers, setCurrentServer } from "@/redux/server/ServerSlice";
 
 // AxiosInstance and constants
-import axiosInstance from "@/config/axiosInstance";
 import { imageBase } from "@/config/Constants";
 
 // Types
@@ -15,6 +14,7 @@ import { RootState } from "@/lib/Types";
 // Styles
 import "./ServerList.css";
 import { useNavigate } from "react-router-dom";
+import { getUserServers } from "@/services/apiGET";
 
 // Props & Peculiar Types
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 
 const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 	// Get servers and active from redux state
-	const servers = useSelector((state: RootState) => state.server.servers);
+	const servers = useSelector((state: RootState) => state.server.servers) || [];
 	const currentServer = useSelector(
 		(state: RootState) => state.server.currentServer
 	);
@@ -33,9 +33,14 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 	const navigate = useNavigate();
 
 	// Get servers of current user
+	const fetchServers = async () => {
+		const servers = await getUserServers()
+		if (servers) dispatch(setServers(servers));
+	}
+
 	useEffect(() => {
-		axiosInstance.get("server/").then((res) => dispatch(setServers(res.data)));
-		return () => {};
+		if (servers.length < 1)
+			fetchServers()
 	}, []);
 
 	return (
@@ -58,9 +63,8 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 					<div className="server-list_item" key={server.id}>
 						<div className="mention-pill unread"></div>
 						<div
-							className={`server ${
-								server.id === currentServer ? "active" : ""
-							}`}
+							className={`server ${server.id === currentServer ? "active" : ""
+								}`}
 							onClick={() => {
 								dispatch(setCurrentServer(server.id));
 								navigate(`/${server.id}`);

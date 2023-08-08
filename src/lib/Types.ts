@@ -20,19 +20,19 @@ export interface Channel {
 }
 
 export interface UserProfile {
-	avatar?: string;
-	cover?: string;
-	phone_number?: string;
-	bio?: string;
+    avatar?: string;
+    cover?: string;
+    phone_number?: string;
+    bio?: string;
 }
 
 export interface User {
-	id: number;
-	friend_id: number | null;
-	username: string;
-	email: string;
-	profile?: UserProfile;
-	friend_profile?: UserProfile;
+    id: number;
+    friend_id: number | null;
+    username: string;
+    email: string;
+    profile?: UserProfile;
+    friend_profile?: UserProfile;
     date_joined: Date;
     type?: string;
     name?: string
@@ -44,31 +44,47 @@ export interface User {
 export interface Group {
     id: number;
     name: string;
-	avatar?: string;
+    avatar?: string;
 }
 
 export interface Message {
-	message: string;
-    files: { file: File; fileName: string, fileType?: "image" | "video" | "application"}[];
+    message: string;
+    files: { file: File; fileName: string, fileType?: "image" | "video" | "application"; file_thumb?: string; }[];
     file?: string;
+    file_name?: string;
+    file_thumb?: string;
     file_type?: "image" | "video" | "application";
-	username: string;
-	sender: number;
+    username: string;
+    sender: number;
     profilePic?: string;
     chatType?: 'user' | 'group'
-	receiver?: number;
-	timestamp: string;
+    receiver?: number;
+    timestamp: string;
     is_group_chat: boolean
     group?: number
 }
 
 export interface AccessDetails {
-	exp: number;
-	iat: number;
-	jti: string;
-	token_type: string;
-	user_id: number;
-	username: string;
+    exp: number;
+    iat: number;
+    jti: string;
+    token_type: string;
+    user_id: number;
+    username: string;
+}
+
+
+export interface ServerCreationInfo {
+	category: string;
+	name: string;
+	avatar: File | null;
+}
+
+
+export interface OnlineStatusData {
+	type: "online_status";
+	user: User; // Replace User with the actual type of user data
+	online_status: "online" | "offline";
 }
 
 
@@ -81,15 +97,27 @@ interface UserState {
     refresh?: string,
 }
 
+export interface OnlineUsers {
+    users: string[]
+}
+
 export type CurrentServer = number | string;
 
 export interface ServerState {
-  servers: Server[];
-  currentServer: CurrentServer;
+    servers: Server[];
+    currentServer: CurrentServer;
+}
+
+export interface FriendsState {
+    pendingRequests: User[];
+    friendsList: User[];
+    blockedFriends: User[];
 }
 
 export interface RootState {
     user: Partial<UserState>,
     server: Partial<ServerState>
+    friends: Partial<FriendsState>
+    onlineUsers: Partial<OnlineUsers>,
 }
 

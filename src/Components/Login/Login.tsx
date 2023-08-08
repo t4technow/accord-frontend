@@ -130,9 +130,8 @@ const Login = () => {
 				</div>
 				<div className="input-wrapper">
 					<div
-						className={`input-element ${
-							authError && !location.state ? "invalid" : ""
-						}`}
+						className={`input-element ${authError && !location.state ? "invalid" : ""
+							}`}
 					>
 						<label htmlFor="email">
 							{errors && errors.email ? (
@@ -148,9 +147,8 @@ const Login = () => {
 						<input type="email" name="email" id="email" ref={emailRef} />
 					</div>
 					<div
-						className={`input-element ${
-							authError && !location.state ? "invalid" : ""
-						}`}
+						className={`input-element ${authError && !location.state ? "invalid" : ""
+							}`}
 					>
 						<label htmlFor="password">
 							{errors && errors.password ? (

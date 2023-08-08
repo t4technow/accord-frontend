@@ -70,6 +70,7 @@
 .m-1 {
 	margin: 1rem;
 }
+
 .mt-0 {
 	margin-top: 0 !important;
 }
@@ -122,8 +123,78 @@ h4.user-email {
 .members-list {
 	padding: 1rem 0.5rem;
 }
+
 .members-list .sub-head {
+	align-items: center;
 	justify-content: space-between;
 	padding-inline: 0.5rem;
 	margin-bottom: 0.5rem;
+}
+
+.members-list .channel:not(:hover) .avatar {
+	background-color: var(--accent);
+}
+
+.members-list .add-users {
+	cursor: pointer;
+	padding: 0.2rem .5rem;
+}
+
+.right-side-bar .submenu.drop-down {
+	padding: 0.7rem .5rem;
+	background: var(--accent);
+	color: var(--hover-text);
+	display: none;
+}
+
+.right-side-bar .submenu.drop-down.show {
+	display: block;
+}
+
+.right-side-bar .submenu.drop-down span.submenu_item__link {
+	display: block;
+	padding: 0.5rem 0.7rem;
+	cursor: pointer;
+	position: relative;
+	padding-bottom: 0.5rem;
+}
+
+.right-side-bar .submenu.drop-down li:has(.show) .right-side-bar .submenu.drop-down li,
+.right-side-bar .submenu.drop-down li:hover {
+	background: var(--dark);
+}
+
+.right-side-bar .submenu.drop-down li {
+	transition: all .2s ease;
+}
+
+.right-side-bar .submenu.drop-down li:not(:last-of-type) {
+	margin-bottom: 0.25rem;
+}
+
+.submenu_dropdown {
+	background: var(--dark);
+	transform: translateY(-610px);
+	height: 0;
+	opacity: 0;
+	transition: all .25s ease-in;
+}
+
+button.btn-primary {
+	font-size: 16px;
+	height: 42px;
+	width: 100%;
+	color: white;
+	background: var(--link-color);
+}
+
+
+.submenu_dropdown.show {
+	transform: translateY(0);
+	height: auto;
+	opacity: 1;
+}
+
+input.search-messages {
+	inset: 0;
 }

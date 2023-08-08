@@ -9,8 +9,11 @@
 	right: 1rem;
 }
 
-.send-message input {
+.send-message input,
+.rendered-message {
+	display: flex;
 	font-family: var(--font-display);
+	align-items: center;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 22px;
@@ -21,6 +24,12 @@
 	padding: 0.5rem 1rem;
 	background-color: var(--active);
 	padding-left: 2rem;
+	width: 100%;
+}
+
+.rendered-message:focus-visible {
+	outline: none;
+	border: none;
 }
 
 .send-message button {
@@ -83,8 +92,52 @@ input.attach-items,
 	gap: 0.5rem;
 }
 
-.media-viewer * {
+.media-viewer img,
+.media-viewer video {
 	height: 100%;
 	width: 184px;
 	object-fit: cover;
+}
+
+.media-holder {
+	position: relative;
+}
+
+.media-name {
+	position: absolute;
+	bottom: 0;
+	height: auto;
+	width: 100%;
+	padding: 0.5rem;
+	background: rgba(0, 0, 0, .7);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.right {
+	position: absolute;
+	right: 0.25rem;
+	display: flex;
+	align-items: center;
+	height: 100%;
+	width: 94px;
+	z-index: 2;
+}
+
+button.emoji-selector {
+	height: 100%;
+}
+
+.emoji-selector svg {
+	width: 38px;
+}
+
+aside.EmojiPickerReact.epr-main {
+	position: absolute !important;
+	right: 0;
+	bottom: 100%;
+	z-index: 5;
+	max-height: 375px;
+	width: 360px !important;
 }

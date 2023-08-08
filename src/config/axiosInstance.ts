@@ -87,6 +87,7 @@ axiosInstance.interceptors.response.use(
                             return axiosInstance(originalRequest);
                         })
                         .catch((err) => {  
+                            console.log(err)
                             localStorage.clear()
                             window.location.reload()
                             NotifySessionExpired()
