@@ -28,7 +28,7 @@ interface PushSubscription {
 const App = () => {
 
 	const loggedUser = useSelector((state: RootState) => state.user.userId);
-	const VAPID = import.meta.env.VITE_VAPID_PUBLIC_KEY
+	// const VAPID = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 	async function requestNotificationPermission() {
 		if (!('PushManager' in window)) {
@@ -118,7 +118,7 @@ const App = () => {
 
 	const checkCameraPermission = async () => {
 		try {
-			const cameraPermission = await navigator.permissions.query({ name: 'camera' });
+			const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
 
 			if (cameraPermission.state === 'granted') {
 				console.log('granted');

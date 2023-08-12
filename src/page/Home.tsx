@@ -18,7 +18,7 @@ import { Message, RootState, User } from "@/lib/Types";
 import { useDispatch, useSelector } from "react-redux";
 import { setOnlineUsers } from "@/redux/chat/onlineUsers";
 import { setCurrentServer } from "@/redux/server/ServerSlice";
-import ServerSkelton from "@/Components/Sidebar/ServerSkelton";
+// import ServerSkelton from "@/Components/Sidebar/ServerSkelton";
 
 
 const Home = () => {
@@ -45,10 +45,9 @@ const Home = () => {
 
 	const location = useLocation();
 	const dispatch = useDispatch();
-	const { server, channel } = useParams()
+	const { server } = useParams()
 
 	const serverList = useSelector((state: RootState) => state.server.servers)
-	const currentChat = useSelector((state: RootState) => state.chat.currentChat)
 
 	// useEffect(() => {
 	// 	console.log('rerendered')
