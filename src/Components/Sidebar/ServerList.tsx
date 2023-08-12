@@ -15,6 +15,7 @@ import { RootState } from "@/lib/Types";
 import "./ServerList.css";
 import { useNavigate } from "react-router-dom";
 import { getUserServers } from "@/services/apiGET";
+import { setChatType } from "@/redux/chat/currentChatSlice";
 
 // Props & Peculiar Types
 type Props = {
@@ -67,6 +68,7 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 								}`}
 							onClick={() => {
 								dispatch(setCurrentServer(server.id));
+								dispatch(setChatType('channel'))
 								navigate(`/${server.id}`);
 							}}
 						>

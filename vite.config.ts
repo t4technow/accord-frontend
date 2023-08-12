@@ -5,7 +5,7 @@ import  path from 'path';
 
 const manifestForPlugin: Partial<VitePWAOptions> ={
   registerType: 'autoUpdate',
-  // injectRegister: null,
+  injectRegister: null,
   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
   manifest: {
     "short_name": "Accord",
@@ -76,7 +76,7 @@ const manifestForPlugin: Partial<VitePWAOptions> ={
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: { https: false },
+  server: { https: false, host: true },
   plugins: [react(),
     VitePWA(manifestForPlugin),
     // VitePWA({

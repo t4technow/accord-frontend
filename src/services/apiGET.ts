@@ -11,6 +11,10 @@ const handleRequest = async <T> (request: Promise<any>): Promise<T|null> => {
   }
 };
 
+export const getSearchResults = async (query: string) => {
+  return await handleRequest<(User | Server)[]>(axiosInstance.get(`search/${query}`))
+}
+
 // Fetch users
 export const getUsers = async () => {
   return await handleRequest<User[]>(axiosInstance.get("users/"));
@@ -18,7 +22,7 @@ export const getUsers = async () => {
 
 // Fetch user info by userId
 export const getUserInfo = async (userId: number) => {
-  return await handleRequest<User>(axiosInstance.get(`user_info/${userId}/`));
+  return await handleRequest<User>(axiosInstance.get(`user-info/${userId}/`));
 };
 
 // Fetch friends list
@@ -34,6 +38,10 @@ export const getPendingRequests = async () => {
 // Fetch mutual friends by userId
 export const getMutualFriends = async (userId: number) => {
   return await handleRequest<User[]>(axiosInstance.get(`mutual-friends/${userId}/`));
+};
+
+export const getFriendSuggestions = async () => {
+  return await handleRequest<User[]>(axiosInstance.get("friend-suggestions/"));
 };
 
 // Fetch user messages for a given chat

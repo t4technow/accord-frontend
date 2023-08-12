@@ -67,7 +67,7 @@
 	z-index: 1;
 	display: flex;
 	gap: 0.4rem;
-	max-width: calc(100vw - 380px);
+	max-width: calc(100% - 20rem);
 }
 
 .message.after::after {
@@ -106,12 +106,33 @@
 	align-self: flex-end;
 }
 
+.send.message .message-meta {
+	width: 40px;
+}
+
+.absolute {
+	position: absolute;
+	display: flex;
+	bottom: -5px;
+	gap: 0.25rem;
+}
+
 .message-meta span.timestamp {
 	font-size: 0.6875rem;
 	align-self: flex-end;
-	position: absolute;
-	bottom: -5px;
 	color: var(--primary-color);
+}
+
+.receipt {
+	color: #ffffff80;
+}
+
+.receipt.read {
+	color: #53bdeb
+}
+
+.receipt svg {
+	height: 10px;
 }
 
 .orderby-date {

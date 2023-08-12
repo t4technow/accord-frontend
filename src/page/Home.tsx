@@ -1,6 +1,6 @@
 // React and React Router hooks
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 import { wsHead } from "@/config/Constants";
 
@@ -11,18 +11,17 @@ import ChannelsList from "@/Components/Sidebar/ChannelsList";
 import Topbar from "@/Components/Topbar/Topbar";
 import ChatArea from "@/Components/ChatArea/ChatArea";
 import RightBar from "@/Components/RightBar/RightBar";
-// import Notification from "@/Components/Notification/Notification";
+import Notification from "@/Components/Notification/Notification";
 
 // Types
 import { Message, RootState, User } from "@/lib/Types";
-import notificationSound from '@/assets/sounds/Notification.mp3'
 import { useDispatch, useSelector } from "react-redux";
 import { setOnlineUsers } from "@/redux/chat/onlineUsers";
+import { setCurrentServer } from "@/redux/server/ServerSlice";
+import ServerSkelton from "@/Components/Sidebar/ServerSkelton";
 
 
 const Home = () => {
-	const [currentChat, setCurrentChat] = useState<number | null>(null);
-	const [chatType, setChatType] = useState<string>("user");
 
 	const [active, setActive] = useState<string>("");
 	const [friends, setFriends] = useState<User[]>([]);
@@ -41,11 +40,38 @@ const Home = () => {
 	const [showVideo, setShowVideo] = useState<boolean>(false)
 
 	const userId = useSelector((state: RootState) => state.user.userId)
+	const showSidebar = useSelector((state: RootState) => state.chat.showSidebar) || false
+	// const [showSidebar, setShowSidebar] = useState<boolean>(false)
 
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const { server, channel } = useParams()
+
+	const serverList = useSelector((state: RootState) => state.server.servers)
+	const currentChat = useSelector((state: RootState) => state.chat.currentChat)
+
+	// useEffect(() => {
+	// 	console.log('rerendered')
+
+	// 	setShowSidebar(false)
+	// 	setShowSidebar(sidebarVisibility)
+	// }, [currentChat, sidebarVisibility])
+
 	// Function to show message, if any in redirect
 	useEffect(() => {
+		if (server) {
+			if (serverList && serverList?.length > 0) {
+				const hasServerWithId = serverList.some(item => item.id === parseInt(server));
+
+				if (hasServerWithId) {
+					dispatch(setCurrentServer(server))
+				} else {
+					dispatch(setCurrentServer('dm'))
+				}
+			} else {
+				dispatch(setCurrentServer('dm'))
+			}
+		}
 		const timer = setTimeout(() => {
 			setShowMessage(false);
 		}, 3000);
@@ -55,7 +81,6 @@ const Home = () => {
 
 
 
-	const soundRef = useRef<HTMLAudioElement>(null)
 	const [isVisible, setIsVisible] = useState(true);
 
 	useEffect(() => {
@@ -79,10 +104,6 @@ const Home = () => {
 		};
 	}, []);
 
-
-	// const [notifications, setNotifications] = useState<{}[] | []>([]);
-
-
 	useEffect(() => {
 
 		// Connect to the WebSocket server
@@ -103,7 +124,7 @@ const Home = () => {
 		// Event listener for WebSocket messages received
 		socket.onmessage = (event) => {
 			const receivedData = JSON.parse(event.data);
-			console.log(receivedData, '==========')
+			console.log(receivedData.type, '==========')
 			dispatch(setOnlineUsers(receivedData.online_users))
 		};
 
@@ -114,59 +135,113 @@ const Home = () => {
 		};
 	}, []);
 
+	const [notifications, setNotifications] = useState<{ title: string; sender_id: number, sender: string; type: 'voice' | 'video' }[] | []>([]);
+
+	useEffect(() => {
+
+		// Connect to the WebSocket server
+		const socket = new WebSocket(
+			wsHead +
+			"notifications/" +
+			`?token=${localStorage.getItem(
+				"access_token"
+			)}`
+		);
+
+		// Event listener for WebSocket connection opens
+		socket.onopen = () => {
+			console.log("Connected to Notification WebSocket");
+			setOnlineSocket(socket)
+		};
+
+		// Event listener for WebSocket messages received
+		socket.onmessage = (event) => {
+			const receivedData = JSON.parse(event.data);
+
+			setNotifications(prevNotifications => [...prevNotifications, receivedData.message])
+		};
+
+		// Cleanup function on component unmount
+		return () => {
+			console.log('closed')
+			socket.close();
+		};
+	}, []);
+
+	console.log('first first', showSidebar)
+
+	useEffect(() => {
+		const timeoutIds: any[] = [];
+
+		notifications.forEach((notification, index) => {
+			if (notification.type !== 'video') {
+				const timeoutId = setTimeout(() => {
+					setNotifications(prevNotifications => prevNotifications.filter((_, i) => i !== index));
+				}, 3000);
+				timeoutIds.push(timeoutId);
+			}
+		});
+
+		return () => {
+			timeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
+		};
+	}, [notifications]);
+
+	const closeNotification = (indx: number) => {
+		setNotifications(prevNotifications => prevNotifications.filter((_, index) => index !== indx));
+	}
+
 	return (
 		<div className="wrapper d-flex">
 			{showMessage && location.state && location.state.message ? (
 				<div className="info-message"> {location.state.message} </div>
 			) : null}
-			<div className="sidebar">
+			<div className={`sidebar ${showSidebar ? 'mobile' : ''}`}>
 				<ServerList
 					showCreateServer={showCreateServer}
 					setShowCreateServer={setShowCreateServer}
 				/>
+				{/* <ServerSkelton /> */}
 				<ChannelsList
-					currentChat={currentChat}
-					setCurrentChat={setCurrentChat}
 					dm={dm}
 					setDm={setDm}
-					chatType={chatType}
-					setChatType={setChatType}
 					onlineStatusSocket={onlineStatusSocket}
 				/>
 			</div>
-			<div className="main-content-wrapper">
-				<Topbar
-					currentChat={currentChat}
-					active={active}
-					setActive={setActive}
-					chatType={chatType}
-					searchQuery={searchQuery}
-					setSearchQuery={setSearchQuery}
-					searchResults={searchResults}
-					setSearchResults={setSearchResults}
-					setHighlightedMessageIndex={setHighlightedMessageIndex}
-					messages={messages}
-					setShowVideo={setShowVideo}
-				/>
-				<div className="main-content d-flex">
-					<ChatArea
-						currentChat={currentChat}
-						setCurrentChat={setCurrentChat}
-						friends={friends}
-						setFriends={setFriends}
+
+			{!showSidebar ?
+				<div className={`main-content-wrapper ${!showSidebar && 'show'}`} >
+					<Topbar
 						active={active}
-						dm={dm}
-						setDm={setDm}
-						chatType={chatType}
+						setActive={setActive}
+						searchQuery={searchQuery}
+						setSearchQuery={setSearchQuery}
 						searchResults={searchResults}
-						highlightedMessageIndex={highlightedMessageIndex}
+						setSearchResults={setSearchResults}
+						setHighlightedMessageIndex={setHighlightedMessageIndex}
 						messages={messages}
-						setMessages={setMessages}
-						showVideo={showVideo}
+						setShowVideo={setShowVideo}
 					/>
-					<RightBar currentChat={currentChat} chatType={chatType} />
+					<div className="offset"></div>
+					<div className="main-content d-flex">
+						<ChatArea
+							friends={friends}
+							setFriends={setFriends}
+							active={active}
+							dm={dm}
+							setDm={setDm}
+							searchResults={searchResults}
+							highlightedMessageIndex={highlightedMessageIndex}
+							messages={messages}
+							setMessages={setMessages}
+							showVideo={showVideo}
+						/>
+						<RightBar />
+					</div>
 				</div>
-			</div>
+				: null}
+
+
 
 			{showCreateServer && (
 				<ServerCreation
@@ -174,18 +249,15 @@ const Home = () => {
 					setShowModal={setShowCreateServer}
 				/>
 			)}
-			{/* {notifications.length > 0 &&
+			{notifications.length > 0 &&
 				<div className="notifications-holder">
 
 					{notifications.map((notification, i) =>
-						<Notification notification={notification} key={i} />
+						<Notification notification={notification} key={i} indx={i} closeNotification={closeNotification} setShowVideo={setShowVideo} />
 					)
 					}
 				</div>
-			} */}
-			<audio ref={soundRef}>
-				<source src={notificationSound}></source>
-			</audio>
+			}
 		</div>
 	);
 };

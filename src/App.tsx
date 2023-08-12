@@ -51,6 +51,22 @@ const App = () => {
 				});
 				console.log('Service Worker registered with scope:', registration.scope);
 
+				// Set up the controllerchange event listener
+				navigator.serviceWorker.addEventListener('controllerchange', async () => {
+					console.log('Service worker activated');
+
+					// Fetch the active service worker registration
+					const registration = await navigator.serviceWorker.getRegistration();
+
+					if (registration) {
+						try {
+							await handlePushSubscription(registration);
+						} catch (error) {
+							console.error('Push subscription failed:', error);
+						}
+					}
+				});
+
 			} catch (error) {
 				console.error('Service Worker registration failed:', error);
 			}
@@ -58,23 +74,9 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		console.log('BK95jBHi_8FQsytb4NIZB3XOtPnoc_LPDPikuDGIb_SJUE5bR_vslHBedZM1Mfbb1smR6YdbFCCsgQlhlmYatyU', 'vapid')
-
-		navigator.serviceWorker.oncontrollerchange = async () => {
-			console.log('Service worker activated');
-
-			// Fetch the active service worker registration
-			const registration = await navigator.serviceWorker.getRegistration();
-
-			if (registration) {
-				try {
-					await handlePushSubscription(registration);
-				} catch (error) {
-					console.error('Push subscription failed:', error);
-				}
-			}
-		};
-	}, [])
+		// Register the service worker when the component mounts
+		registerServiceWorker();
+	}, []);
 
 	async function handlePushSubscription(registration: any) {
 		try {
@@ -114,12 +116,27 @@ const App = () => {
 		}
 	}
 
+	const checkCameraPermission = async () => {
+		try {
+			const cameraPermission = await navigator.permissions.query({ name: 'camera' });
+
+			if (cameraPermission.state === 'granted') {
+				console.log('granted');
+			} else if (cameraPermission.state === 'denied') {
+				const getPermission = await navigator.mediaDevices.getUserMedia({ video: true })
+				return getPermission
+			}
+		} catch (error) {
+			console.error('Error checking camera permission:', error);
+		}
+	};
 
 	useEffect(() => {
 		if (!loggedUser) return
 		if (Notification.permission !== 'granted') {
 			requestNotificationPermission();
 		}
+		checkCameraPermission()
 		console.log(loggedUser, '---')
 	}, [loggedUser])
 
@@ -130,7 +147,7 @@ const App = () => {
 				<Route path="/user/*" element={<Auth />} />
 				<Route element={<ProtectedRoute />}>
 					{/* Protected Routes: only logged in users will be able to access */}
-					<Route path="/:server?" element={<Home />} />
+					<Route path="/:server?/:channel?" element={<Home />} />
 					{/* Catch-all route to redirect undefined paths to the home page */}
 					<Route path="/*" element={<Navigate to="/" />} />
 				</Route>

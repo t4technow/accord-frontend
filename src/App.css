@@ -1,3 +1,8 @@
+svg.artwork-L5TAwQ {
+	height: 100vh;
+	width: 100vw;
+}
+
 .sidebar {
 	display: flex;
 }
@@ -12,10 +17,11 @@
 
 .main-content-wrapper {
 	width: 100%;
+	height: 100vh;
 }
 
 .main-content {
-	height: calc(100% - 48px);
+	height: calc(100vh - 48px);
 }
 
 .email-container-fluid {
@@ -57,4 +63,226 @@
 
 .notification:not(:last-of-type) {
 	margin-bottom: 1rem;
+}
+
+.notification .response {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.notification .response button {
+	width: 50%;
+}
+
+.notification button.btn-primary {
+	background: var(--green);
+}
+
+video.video-call_notification {
+	aspect-ratio: 16/9;
+	max-width: 100%;
+	object-fit: cover;
+}
+
+.notification-header {
+	position: absolute;
+	top: 8px;
+	padding: 5px;
+	color: white;
+	left: 8px;
+	right: 7px;
+	background: var(--separator);
+}
+
+.offset {
+	height: 48px;
+	display: none;
+}
+
+.main-search {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+
+}
+
+.main-search .close-modal {
+	background: none;
+	position: absolute;
+	top: 1.8rem;
+	right: 2rem;
+}
+
+.main-search .search-box {
+	position: relative;
+	max-width: 100vh;
+	width: 500px;
+	padding: 1rem;
+	background: var(--dark);
+}
+
+.main-search input.secondary-sidebar_header {
+	background: var(--dark-secondary);
+	margin-bottom: 1rem;
+	color: var(--hover-text);
+}
+
+.main-search .channel.dm {
+	height: 32px;
+}
+
+ul.search-results {
+	height: 240px;
+	max-height: calc(100vh - 7rem);
+}
+
+.no-users {
+	justify-content: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.no-users p {
+	text-align: center;
+}
+
+@media (max-width: 768px) {
+	.login-image {
+		display: none;
+	}
+
+	.sidebar {
+		display: none;
+	}
+
+	.sidebar.mobile {
+		display: flex;
+		width: 100%;
+	}
+
+	.secondary-sidebar {
+		flex-grow: 1;
+	}
+
+	.menu-toggler {
+		display: block;
+	}
+
+	.send-message {
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding-inline: 1rem;
+		padding-bottom: 1rem;
+	}
+
+	.message {
+		max-width: calc(100vh - 40px);
+	}
+
+	.action-menu .search-messages-holder:not(.show) {
+		display: none;
+	}
+
+	.action-menu .search-messages-icon {
+		display: block;
+	}
+
+	.messages:hover {
+		padding-right: 1.3rem;
+	}
+
+	.messages:hover::-webkit-scrollbar {
+		display: none;
+	}
+
+	.topbar {
+		position: fixed;
+		top: 0;
+		z-index: 10;
+	}
+
+	.offset {
+		display: block;
+	}
+
+	.media-viewer {
+		height: 140px;
+	}
+
+	.media-viewer img,
+	.media-viewer video {
+		width: 120px;
+	}
+
+	.message {
+		max-width: calc(100vw - 100px);
+	}
+
+	.absolute {
+		left: 0;
+	}
+
+	.user-section {
+		position: fixed;
+	}
+
+	.user-section .profile-pop {
+		left: 0;
+		right: 0;
+	}
+
+	.modal {
+		background: var(--dark);
+		height: 100vh;
+		width: 100vw;
+		overflow: hidden;
+	}
+
+	.modal .content-wrapper {
+		width: 100%;
+		position: relative;
+		height: 100vh;
+	}
+
+	.modal .close-btn {
+		left: 1rem;
+		top: 1rem;
+	}
+
+	.modal .user-image-holder {
+		height: 240px;
+	}
+
+	.modal .user-profile {
+		height: 100%;
+	}
+
+	.modal .user-cover {
+		height: 240px;
+	}
+
+	.modal .user-cover-photo {
+		width: 100%;
+		height: 175px;
+		object-fit: cover;
+	}
+
+	.main-search {
+		display: flex;
+		align-items: flex-start;
+	}
+}
+
+.secondary-sidebar_header.search-messages-holder.show {
+	position: absolute;
+	top: 50px;
+	right: 0;
+	z-index: 5;
 }

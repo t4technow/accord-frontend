@@ -50,8 +50,6 @@
 // // skipWaiting();
 // clientsClaim();
 
-// Service Worker: sw.js
-
 self.addEventListener("install", (event) => {
 	console.log("Service worker installed");
 });

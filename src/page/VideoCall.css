@@ -14,22 +14,54 @@
   gap: .3em;
 }
 
-.video-holder {
+.video-holder,
+.video-holder video {
+  position: relative;
   background: #000;
-  height: 230px;
+  width: 100%;
   place-self: end;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  vertical-align: middle;
+  max-height: 242px;
 }
 
-.video-holder:last-of-type {
+.video-holder.peer {
   place-self: start;
+}
+
+.video-muted-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .video-controls {
   display: flex;
   height: 46px;
-  background-color: #000;
+  background-image: linear-gradient(-45deg, transparent, rgba(0, 0, 255, .2), transparent);
   color: aliceblue;
   gap: 1rem;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.video-controls .icon-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  justify-content: center;
+}
+
+.video-controls .icon-wrapper svg path {
+  fill: aliceblue;
+}
+
+.video-controls .icon-wrapper.muted {
+  background: tomato;
 }

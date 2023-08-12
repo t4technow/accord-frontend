@@ -57,16 +57,17 @@
 	height: 40px;
 }
 
-img.server_avatar {
+.server_avatar {
 	height: 48px;
 	width: 48px;
 	transition: all 0.2s ease;
+	background: var(--accent);
 }
 
 .server:hover,
 .server.active,
 .server-list_item:has(.server.active) .server_avatar,
-.server-list_item .server:hover img.server_avatar {
+.server-list_item .server:hover .server_avatar {
 	border-radius: 12px;
 	background-color: var(--green);
 }

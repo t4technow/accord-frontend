@@ -7,6 +7,8 @@
 	bottom: 1rem;
 	left: 1rem;
 	right: 1rem;
+	z-index: 5;
+	background: var(--accent);
 }
 
 .send-message input,
@@ -90,6 +92,16 @@ input.attach-items,
 	position: relative;
 	display: flex;
 	gap: 0.5rem;
+	overflow-y: auto;
+}
+
+.media-viewer::-webkit-scrollbar {
+	height: 6px;
+}
+
+.media-viewer::-webkit-scrollbar-thumb {
+	background-color: var(--dark);
+	border-radius: 4px;
 }
 
 .media-viewer img,
@@ -135,9 +147,10 @@ button.emoji-selector {
 
 aside.EmojiPickerReact.epr-main {
 	position: absolute !important;
-	right: 0;
+	right: -8px;
 	bottom: 100%;
 	z-index: 5;
 	max-height: 375px;
-	width: 360px !important;
+	width: 100%;
+	max-width: 360px !important;
 }

@@ -1,0 +1,30 @@
+.modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+  z-index: 9;
+}
+
+.modal .content-wrapper {
+  width: 52%;
+  position: relative;
+}
+
+.modal .user-profile {
+  box-shadow: rgb(0 0 0 / 20%) 0px 7px 29px 0px;
+  padding-bottom: .5rem;
+}
+
+.modal .user-profile .avatar {
+  height: 80px;
+}
+
+.modal .close-btn {
+  position: absolute;
+  right: -2rem;
+  z-index: 10;
+  color: #fff;
+}

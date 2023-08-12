@@ -1,7 +1,6 @@
 .secondary-sidebar {
 	width: 240px;
 	height: 100vh;
-	overflow: hidden;
 	background-color: var(--dark-secondary);
 }
 
@@ -28,7 +27,7 @@
 .channel-list {
 	padding-right: 0.5rem;
 	padding-top: 0.5rem;
-	height: calc(100% - 80px);
+	height: calc(100% - 94px);
 	overflow-y: scroll;
 }
 
@@ -106,6 +105,10 @@
 	padding: 1px 0px;
 }
 
+.channel-list_item.dark {
+	background: var(--dark);
+}
+
 .friends-list_item_info {
 	position: relative;
 }
@@ -145,7 +148,21 @@
 	color: var(--white);
 }
 
-.channel:hover {
+.user-section .channel .user-meta:hover,
+.channel:not(.user-section .channel):hover {
+	background-color: var(--hover-bg);
+	color: var(--hover-text);
+}
+
+.user-section .channel-list_item {
+	width: 100%;
+}
+
+.user-section .channel {
+	justify-content: space-between;
+}
+
+.user-section .channel-avatar {
 	background-color: var(--hover-bg);
 	color: var(--hover-text);
 }
@@ -156,12 +173,12 @@
 	background: var(--dark);
 }
 
-.user-profile.avatar.name,
-.channel-avatar.name {
+.avatar.name {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-weight: 700;
+	color: #fff;
 }
 
 .channel svg {
@@ -184,4 +201,108 @@
 	position: fixed;
 	bottom: 0;
 	height: 80px;
+}
+
+.user-section .user-meta {
+	display: flex;
+	align-items: center;
+	height: auto;
+	gap: 0.7rem;
+	margin: -0.4rem;
+	padding: 3px 0.4rem;
+	border-radius: 4px;
+}
+
+.settings-icon .icon-wrapper {
+	display: flex;
+	align-items: center;
+}
+
+.user-section .channel:hover {
+	cursor: default;
+}
+
+.user-section .channel,
+.user-section .user-meta,
+.user-section .settings-icon {
+	position: relative;
+}
+
+.user-section .user-meta:not(.m-1.mt-0):hover,
+.user-section .settings-icon:hover {
+	cursor: pointer;
+	position: relative;
+}
+
+.pop-up {
+	position: absolute;
+	background: var(--dark);
+	border-radius: 4px;
+	bottom: 47px;
+	display: none;
+	box-shadow: rgb(0 0 0 / 20%) 0px 7px 29px 0px;
+}
+
+.pop-up.show {
+	display: block;
+}
+
+.user-section .profile-pop {
+	left: -30px;
+	right: -70px;
+}
+
+.settings-pop {
+	padding: 0.5rem;
+	right: 0;
+	width: 150px;
+}
+
+.pop-up_item {
+	padding: .5rem .7rem;
+	border-radius: 3px;
+	transition: all .24s ease-in;
+}
+
+.pop-up_item:hover {
+	background-color: var(--hover-bg);
+	color: var(--hover-text);
+}
+
+.user-section .channel svg {
+	height: 30px;
+	width: 30px;
+	fill: currentColor;
+}
+
+.profile-pop .user-cover-photo {
+	height: 80px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+
+.profile-pop .user-profile.avatar.name {
+	transform: translateX(10px);
+}
+
+.profile-pop .user-cover {
+	height: 140px;
+}
+
+.user-profile .name {
+	font-size: 2rem;
+	padding-bottom: 0;
+}
+
+.user-section .online-indicator.online {
+	left: 28px;
+	bottom: 3px;
+}
+
+.user-profile {
+	padding-bottom: 1rem;
+}
+
+.user-profile .user-details {
+	margin-bottom: 0;
 }

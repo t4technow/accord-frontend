@@ -14,18 +14,19 @@ import { RootState, User } from "@/lib/Types";
 
 import "./RightBar.css";
 import { addToGroupRequest } from "@/services/apiPOST";
+import { getRandomColor } from "@/utils/colorGenerator";
 
 // Props & Peculiar Types
-interface Props {
-	currentChat?: number | null;
-	chatType?: string;
-}
 
-const RightBar = ({ currentChat, chatType }: Props) => {
+
+const RightBar = () => {
 	// Current Server
 	const serverId = useSelector(
 		(state: RootState) => state.server.currentServer
 	);
+	const chatType = useSelector((state: RootState) => state.chat.chatType)
+	const currentChat = useSelector((state: RootState) => state.chat.currentChat)
+
 	const friends = useSelector((state: RootState) => state.friends.friendsList)
 	const [selectedMembers, setSelectedMembers] = useState<User[] | null>([]);
 	const [selectedIds, setSelectedIds] = useState<number[] | null>([]);
@@ -127,7 +128,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 	};
 
 	const friendListKey = nonMembers?.length;
-
+	const randomColor = getRandomColor()
 	return (
 		<div className="right-side-bar">
 			{chatType === "user" ? (
@@ -143,7 +144,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 											alt=""
 										/>
 									) : (
-										<div className="user-cover-photo"></div>
+										<div className="user-cover-photo" style={{ backgroundColor: randomColor }}></div>
 									)}
 									<div className="user-meta m-1 mt-0">
 										{user?.profile?.avatar ? (
@@ -153,7 +154,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 												className="user-profile avatar"
 											/>
 										) : (
-											<div className="user-profile avatar name">
+											<div className="user-profile avatar name" style={{ backgroundColor: randomColor }}>
 												<span className="head">
 													{user.username.charAt(0).toUpperCase()}
 												</span>
@@ -205,7 +206,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 										</div>
 									</button>
 									{showMutualFriends ? (
-										<FriendList users={mutualFriends} friendsList={true} />
+										<FriendList users={mutualFriends} />
 									) : null}
 								</div>
 							) : null}
@@ -264,7 +265,7 @@ const RightBar = ({ currentChat, chatType }: Props) => {
 							</button>
 						</li>
 					</div>
-					<FriendList users={members} friendsList={true} members={true} />
+					<FriendList users={members} members={true} />
 				</div>
 			)}
 		</div>

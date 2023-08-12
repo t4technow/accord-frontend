@@ -1,3 +1,4 @@
+
 export interface Server {
     id: number
     name: string
@@ -39,6 +40,8 @@ export interface User {
     is_admin?: boolean;
     avatar?: string;
     chat_type?: 'user' | 'group';
+    unread_count?: number;
+    pending_requests?: number;
 }
 
 export interface Group {
@@ -62,6 +65,11 @@ export interface Message {
     timestamp: string;
     is_group_chat: boolean
     group?: number
+    is_read?: boolean
+    delivery_status?: boolean
+    delivered_to?: (number |string)[]
+    read_by?: (number |string)[]
+
 }
 
 export interface AccessDetails {
@@ -89,12 +97,13 @@ export interface OnlineStatusData {
 
 
 // State Interfaces
-interface UserState {
+export interface UserState {
     isAuthenticated?: boolean,
-    userId?: number,
+    userId?: CurrentChat,
     username?: string,
     access?: string,
     refresh?: string,
+    loggedUser: User | null,
 }
 
 export interface OnlineUsers {
@@ -103,6 +112,15 @@ export interface OnlineUsers {
 
 export type CurrentServer = number | string;
 
+export type CurrentChat = number | null;
+export type ChatType = 'user' | 'group' | 'channel' | '';
+export interface ChatState {
+    currentChat: CurrentChat;
+    chatType: ChatType;
+    target: CurrentChat;
+    showSidebar: boolean;
+
+}
 export interface ServerState {
     servers: Server[];
     currentServer: CurrentServer;
@@ -119,5 +137,6 @@ export interface RootState {
     server: Partial<ServerState>
     friends: Partial<FriendsState>
     onlineUsers: Partial<OnlineUsers>,
+    chat: Partial<ChatState>;
 }
 

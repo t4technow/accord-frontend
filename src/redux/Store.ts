@@ -6,11 +6,13 @@ import { userReducer } from './user/userSlice'
 import serverSlice from './server/ServerSlice'
 import friendsSlice from './chat/friendsSlice'
 import onlineUsers from './chat/onlineUsers'
+import chatSlice from './chat/currentChatSlice'
 
 
 const rootReducer = combineReducers({
     user: userReducer,
     server: serverSlice,
+    chat: chatSlice,
     friends: friendsSlice,
     onlineUsers: onlineUsers,
 })

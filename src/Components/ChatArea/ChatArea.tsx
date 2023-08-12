@@ -13,7 +13,7 @@ import FriendList from "../User/FriendList";
 
 // AxiosInstance and constants
 import { wsHead } from "@/config/Constants";
-import { getFriends, getPendingRequests, getUsers } from "@/services/apiGET";
+import { getFriendSuggestions, getFriends, getPendingRequests } from "@/services/apiGET";
 
 // Types
 import { Message, RootState, User } from "@/lib/Types";
@@ -26,11 +26,9 @@ import VideoCall from "@/page/VideoCall";
 // Props & Peculiar Types
 interface Props {
 	currentChat?: number | null;
-	setCurrentChat: React.Dispatch<SetStateAction<number | null>>;
 	friends: User[];
 	setFriends: React.Dispatch<SetStateAction<User[]>>;
 	active: string;
-	chatType: string;
 	dm: User[];
 	setDm: React.Dispatch<SetStateAction<User[]>>;
 	messages: Message[];
@@ -48,14 +46,11 @@ type SelectedFile = {
 }
 
 const ChatArea = ({
-	currentChat,
-	setCurrentChat,
 	friends,
 	setFriends,
 	active,
 	dm,
 	setDm,
-	chatType,
 	messages,
 	setMessages,
 	searchResults,
@@ -66,6 +61,11 @@ const ChatArea = ({
 	const serverId = useSelector(
 		(state: RootState) => state.server.currentServer
 	);
+
+	const chatType = useSelector((state: RootState) => state.chat.chatType)
+	const currentChat = useSelector((state: RootState) => state.chat.currentChat)
+
+	const [showAnswer, setShowAnswer] = useState<boolean>(false)
 
 	// Logged in user id
 	const userId = useSelector((state: RootState) => state.user.userId);
@@ -110,8 +110,8 @@ const ChatArea = ({
 					setFriends(pendingRequests);
 				}
 			} else if (active === "suggestions") {
-				const users = await getUsers();
-				if (users) setFriends(users);
+				const suggestions = await getFriendSuggestions();
+				if (suggestions) setFriends(suggestions);
 			} else if (active === "blocked") {
 				console.log("empty");
 			}
@@ -209,6 +209,10 @@ const ChatArea = ({
 					}
 				}
 			}
+
+			if (receivedData.message_type === 'video_signal') {
+				setShowAnswer(true)
+			}
 		};
 
 		// Cleanup function on component unmount
@@ -247,6 +251,8 @@ const ChatArea = ({
 			return;
 		}
 
+
+
 		try {
 			// Convert selected media to Base64 strings
 			const filePromises = selectedFiles.map((file) =>
@@ -283,12 +289,10 @@ const ChatArea = ({
 			{/* show chat area if there is an active chat */}
 			{currentChat ? (
 				<>
-					{showVideo && <VideoCall chatSocket={chatSocket!} currentChat={currentChat} />}
+					{showVideo || showAnswer ? <VideoCall /> : null}
 					<ChatComponent
 						messages={messages}
 						setMessages={setMessages}
-						currentChat={currentChat}
-						chatType={chatType}
 						searchResults={searchResults}
 						highlightedMessageIndex={highlightedMessageIndex}
 					/>
@@ -311,7 +315,6 @@ const ChatArea = ({
 							friends={friends}
 							dm={dm}
 							setDm={setDm}
-							setCurrentChat={setCurrentChat}
 							active={active}
 							showIcons={true}
 						/>
