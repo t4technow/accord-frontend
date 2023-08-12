@@ -65,7 +65,7 @@ const manifestForPlugin: Partial<VitePWAOptions> ={
     // ]
   },
   srcDir: path.resolve(__dirname, 'public'),
-      filename: 'serviceWorker.js',
+      filename: 'NotificationWorker.js',
       strategies: 'injectManifest',
 }
 
