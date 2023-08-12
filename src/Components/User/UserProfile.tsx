@@ -1,7 +1,6 @@
 import { formatDate } from "@/Helper/FormatDate"
 import { User } from "@/lib/Types"
 import { getRandomColor } from "@/utils/colorGenerator"
-import { useEffect } from "react";
 
 interface Props {
   currentUser: User | null;

@@ -1,7 +1,7 @@
 import { RootState } from "@/lib/Types";
 import { get_user_media } from "@/page/helper";
 import { setCurrentChat, setTarget } from "@/redux/chat/currentChatSlice";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { SetStateAction, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface Props {
