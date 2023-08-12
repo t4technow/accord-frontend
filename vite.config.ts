@@ -5,7 +5,6 @@ import  path from 'path';
 
 const manifestForPlugin: Partial<VitePWAOptions> ={
   registerType: 'autoUpdate',
-  injectRegister: null,
   includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
   manifest: {
     "short_name": "Accord",
@@ -68,10 +67,6 @@ const manifestForPlugin: Partial<VitePWAOptions> ={
   srcDir: path.resolve(__dirname, 'public'),
       filename: 'serviceWorker.js',
       strategies: 'injectManifest',
-  devOptions: {
-        enabled: true,
-        type: 'module',
-      },
 }
 
 // https://vitejs.dev/config/
