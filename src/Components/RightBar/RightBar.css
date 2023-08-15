@@ -3,6 +3,7 @@
 	width: 340px;
 	height: calc(100vh - 48px);
 	overflow-x: auto;
+	flex-shrink: 0;
 }
 
 .right-side-bar::-webkit-scrollbar {

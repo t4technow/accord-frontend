@@ -13,7 +13,7 @@ import FriendList from "../User/FriendList";
 
 // AxiosInstance and constants
 import { wsHead } from "@/config/Constants";
-import { getFriendSuggestions, getFriends, getPendingRequests } from "@/services/apiGET";
+import { getFriendSuggestions, getFriends, getOnlineUsers, getPendingRequests } from "@/services/apiGET";
 
 // Types
 import { Message, RootState, User } from "@/lib/Types";
@@ -86,7 +86,10 @@ const ChatArea = ({
 	const fetchFriendsData = async () => {
 		if (active === "") {
 			if (onlineUsers?.length > 0) {
-				// setFriends(onlineUsers)
+				const friendsList = await getOnlineUsers(onlineUsers)
+				if (friendsList) {
+					setFriends(friendsList);
+				}
 			}
 			return;
 		}
@@ -313,6 +316,7 @@ const ChatArea = ({
 						<FriendList
 							users={friends}
 							friends={friends}
+							setFriends={setFriends}
 							dm={dm}
 							setDm={setDm}
 							active={active}

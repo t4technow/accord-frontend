@@ -49,12 +49,15 @@ const ChatComponent = ({
 			if (serverId === "dm" && chatType === "user") {
 				const userMessages = await getUserMessages(currentChat);
 				if (userMessages) setMessages(userMessages);
+				else setMessages([])
 			} else if (serverId === "dm" && chatType === "group") {
 				const groupMessages = await getGroupMessages(currentChat);
 				if (groupMessages) setMessages(groupMessages);
+				else setMessages([])
 			} else if (chatType === "channel") {
 				const channelMessages = await getChannelMessages(currentChat);
 				if (channelMessages) setMessages(channelMessages);
+				else setMessages([])
 			}
 		} catch (error) {
 			console.log("Error fetching messages", error);

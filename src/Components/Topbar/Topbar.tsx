@@ -72,6 +72,11 @@ const Topbar = ({
 	const [recipient, setRecipient] = useState<User | Group | Server | null>(null);
 	const [showSearch, setShowSearch] = useState<boolean>(false)
 
+	const [filteredList, setFilteredList] = useState<User[]>(friends);
+	const searchQueryRef = useRef<HTMLInputElement>(null);
+
+	const pendingReqCount = useSelector((state: RootState) => state.user.loggedUser?.pending_requests)
+
 	const dispatch = useDispatch();
 
 	const onlineUsers = useSelector(
@@ -99,11 +104,12 @@ const Topbar = ({
 		}
 	};
 	useEffect(() => {
-		if (!currentChat) return;
+		if (!currentChat) return
 		fetchChatInfo(currentChat);
 		setSearchQuery("");
 		setSearchResults([]);
 		setHighlightedMessageIndex(-1);
+
 	}, [currentChat, chatType]);
 
 	// type guard function to check if it's a User
@@ -176,8 +182,7 @@ const Topbar = ({
 	}, []);
 
 	// Function and to search users
-	const [filteredList, setFilteredList] = useState<User[]>(friends);
-	const searchQueryRef = useRef<HTMLInputElement>(null);
+
 	const searchUsers = () => {
 		const query = searchQueryRef?.current?.value.trim();
 		const filtered = friends.filter(
@@ -284,7 +289,7 @@ const Topbar = ({
 								onClick={() => setActive("pending")}
 							>
 								Pending
-								<span className="count">{1}</span>
+								<span className="count">{pendingReqCount}</span>
 							</li>
 							<li
 								className={`topbar-item ${active === "suggestions" ? "active" : ""

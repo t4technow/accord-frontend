@@ -30,6 +30,12 @@ export const getFriends = async () => {
   return await handleRequest<User[]>(axiosInstance.get("friends/"));
 };
 
+// Fetch friends list
+export const getOnlineUsers = async (onlineUsers: (number | string)[]) => {
+  return await handleRequest<User[]>(axiosInstance.get('online-users/' + onlineUsers));
+};
+
+
 // Fetch pending friend requests
 export const getPendingRequests = async () => {
   return await handleRequest<User[]>(axiosInstance.get("pending-requests/"));

@@ -1,5 +1,5 @@
 import { UserState } from "@/lib/Types";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: UserState = {
     isAuthenticated: false,
@@ -31,10 +31,13 @@ const userSlice = createSlice({
         },
         setCurrentUser(state, action) {
             state.loggedUser = action.payload
+        },
+        setPendingRequests(state, action: PayloadAction<number | undefined>) {
+            state.loggedUser!.pending_requests = action.payload
         }
     }
 })
 
 
-export const { loginReducer, logoutReducer, setCurrentUser } = userSlice.actions
+export const { loginReducer, logoutReducer, setCurrentUser, setPendingRequests } = userSlice.actions
 export const userReducer = userSlice.reducer;

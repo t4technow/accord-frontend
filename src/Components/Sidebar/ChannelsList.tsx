@@ -22,6 +22,7 @@ import { setChatType, setCurrentChat, setShowSidebar } from "@/redux/chat/curren
 import { getRandomColor } from "@/utils/colorGenerator";
 import Settings from "../User/Settings";
 import UserProfile from "../User/UserProfile";
+import { setFriendsList } from "@/redux/chat/friendsSlice";
 
 // Props & Peculiar Types
 type Props = {
@@ -117,6 +118,7 @@ const ChannelsList = ({
 				onlineStatusSocket?.close()
 				// user details from redux user state & redirect to login
 				dispatch(logoutReducer());
+				dispatch(setFriendsList([]))
 				navigate("/user/login");
 			});
 	};
