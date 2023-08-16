@@ -1,3 +1,4 @@
+import { wsHead } from "@/config/Constants"
 
 export async function get_user_media(options = { video: true, audio: true }) {
     try {
@@ -21,13 +22,8 @@ export async function get_user_screen() {
 
 export const getEndpoint = () => {
 
-    var location = window.location
-    let wsStart = 'ws://'
-
-    if (location.protocol == 'https') wsStart = 'wss://'
-
     // let endpoint = wsStart + '127.0.0.1:8000' + location.pathname
-    let endpoint = wsStart + '127.0.0.1:5555/peersocket/'
+    let endpoint = wsHead + 'peersocket/'
 
     return endpoint
 }
