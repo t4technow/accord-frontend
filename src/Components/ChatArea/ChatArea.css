@@ -57,10 +57,6 @@
 	}
 }
 
-.message-holder {
-	max-width: calc(100vw - 44rem);
-}
-
 .message {
 	color: #fff;
 	width: fit-content;

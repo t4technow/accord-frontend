@@ -280,6 +280,12 @@ ul.search-results {
 	}
 }
 
+@media (min-width:768px) {
+	.message-holder {
+		max-width: calc(100vw - 44rem);
+	}
+}
+
 .secondary-sidebar_header.search-messages-holder.show {
 	position: absolute;
 	top: 50px;
