@@ -94,11 +94,6 @@ const ChatArea = ({
 			return;
 		}
 
-		if (active === "friends" && cachedFriends.length > 0) {
-			setFriends(cachedFriends);
-			return;
-		}
-
 		try {
 			if (active === "friends") {
 				const friendsList = await getFriends()

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setChatType, setCurrentChat, setShowSidebar } from "@/redux/chat/currentChatSlice";
 import { getRandomColor } from "@/utils/colorGenerator";
 import { setPendingRequests } from "@/redux/user/userSlice";
+import { setFriendsList } from "@/redux/chat/friendsSlice";
 
 interface Props {
 	users: User[] | undefined;
@@ -184,6 +185,7 @@ const FriendList = ({
 																		newFriends.splice(i, 1);
 																		// Update state with the new array
 																		setFriends(newFriends);
+
 																	}
 																})
 														}
