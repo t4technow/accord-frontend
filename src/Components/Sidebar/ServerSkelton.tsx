@@ -9,7 +9,7 @@ const ServerSkelton = () => {
         <div
           className='server active'
         >
-          <img className="server_avatar_skelton" src="/adobe.jpg" />
+          <img className="server_avatar_skelton" src="/adobe.jpg" alt='direct messages' />
         </div>
       </div>
       <div className="separator"></div>

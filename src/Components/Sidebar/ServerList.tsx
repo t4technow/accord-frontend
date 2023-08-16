@@ -58,7 +58,7 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 						navigate("/@me");
 					}}
 				>
-					<img className="server_avatar avatar" src="/adobe.jpg" />
+					<img className="server_avatar avatar" src="/adobe.jpg" alt="direct messages" />
 				</div>
 			</div>
 			<div className="separator"></div>
@@ -78,6 +78,7 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 							<img
 								className="server_avatar avatar"
 								src={`${imageBase}${server.avatar}`}
+								alt={server.name}
 							/>
 						</div>
 					</div>

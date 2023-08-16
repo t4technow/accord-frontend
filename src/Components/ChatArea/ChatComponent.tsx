@@ -144,7 +144,7 @@ const ChatComponent = ({
 						</svg>
 					</button>
 					{openFile.file_type === "image" ? (
-						<img src={(imageBase + openFile.file) as string} />
+						<img src={(imageBase + openFile.file) as string} alt={openFile.file_name} />
 					) : (
 						<video
 							src={(imageBase + openFile.file) as string}
@@ -202,7 +202,7 @@ const ChatComponent = ({
 												<img
 													className="channel-avatar avatar"
 													src={imageBase + message.profilePic}
-													alt=""
+													alt={message.username}
 												/>
 											) : (
 												<span className="head">
@@ -231,7 +231,7 @@ const ChatComponent = ({
 														<img
 															className="message-image"
 															src={URL.createObjectURL(fileData.file)}
-															alt=""
+															alt={fileData.fileName}
 															onClick={() => setOpenFile(message)}
 														/>
 													)}
@@ -252,7 +252,7 @@ const ChatComponent = ({
 																<img
 																	className="file-thumb"
 																	src={fileData.file_thumb}
-																	alt=""
+																	alt={fileData.fileName}
 																/>
 															)}
 															{fileData.fileName}
@@ -306,7 +306,7 @@ const ChatComponent = ({
 													<img
 														className="message-image"
 														src={imageBase + message.file}
-														alt=""
+														alt={message.file_name}
 														onClick={() => setOpenFile(message)}
 													/>
 												)}
@@ -332,7 +332,7 @@ const ChatComponent = ({
 																		<img
 																			className="file-thumb"
 																			src={imageBase + message.file_thumb}
-																			alt=""
+																			alt={message.file_name}
 																		/>
 																		<div className="file-download">
 																			<svg
@@ -368,7 +368,7 @@ const ChatComponent = ({
 																			? "/pdf.png"
 																			: "/adobe.jpg"
 																	}
-																	alt=""
+																	alt={message.file_name}
 																/>
 															</div>
 															{message.file_name}

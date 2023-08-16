@@ -237,7 +237,7 @@ const ChannelsList = ({
 										</li>
 									) : (
 										<div className="no-users">
-											<img src="/b36de980b174d7b798c89f35c116e5c6.svg" alt="" />
+											<img src="/b36de980b174d7b798c89f35c116e5c6.svg" alt="no users" />
 											{searchError != '' ?
 												<p>{searchError}</p>
 												: <p>Start Typing to search</p>
@@ -346,7 +346,7 @@ const ChannelsList = ({
 				<div className="user-section" ref={userSectionRef}>
 					<div className="call-details"></div>
 					<div className="user-detail">
-						<li
+						<div
 							className="channel-list_item dark"
 							onClick={() => {
 								dispatch(setCurrentChat(null))
@@ -366,7 +366,7 @@ const ChannelsList = ({
 										<img
 											className="channel-avatar avatar"
 											src={currentUser?.profile?.avatar}
-											alt=""
+											alt={currentUser.username}
 										/>
 									) : (
 										<div className="channel-avatar avatar name" style={{ backgroundColor: randomColor }}>
@@ -388,7 +388,7 @@ const ChannelsList = ({
 									</div>
 								</div>
 							</div>
-						</li>
+						</div>
 					</div>
 				</div>
 			</div>

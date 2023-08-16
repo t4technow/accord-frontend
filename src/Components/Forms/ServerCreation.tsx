@@ -155,7 +155,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 										<img
 											className="category-avatar avatar"
 											src={gaming}
-											alt=""
+											alt="gaming icon"
 										/>
 										<span className="category-name">Gaming</span>
 									</div>
@@ -188,7 +188,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 										<img
 											className="category-avatar avatar"
 											src={education}
-											alt=""
+											alt="education icon"
 										/>
 										<span className="category-name">Educational</span>
 									</div>
@@ -221,7 +221,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 										<img
 											className="category-avatar avatar"
 											src={science}
-											alt=""
+											alt="science icon"
 										/>
 										<span className="category-name">Science and Tech</span>
 									</div>
@@ -254,7 +254,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 										<img
 											className="category-avatar avatar"
 											src={entertainment}
-											alt=""
+											alt="entertainment icon"
 										/>
 										<span className="category-name">Entertainment</span>
 									</div>
@@ -285,7 +285,7 @@ const ServerCreation = ({ showModal, setShowModal }: Props) => {
 										<img
 											src={imageUrl}
 											className="uploaded-image-preview"
-											alt=""
+											alt='uploaded image'
 										/>
 									) : (
 										<svg width="80" height="80" viewBox="0 0 80 80" fill="none">

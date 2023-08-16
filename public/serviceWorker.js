@@ -66,7 +66,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("push", function (event) {
 	const options = {
 		body: event.data.text(),
-		icon: "/adobe.jpg", // Path to your notification icon
+		icon: "/icon.png", // Path to your notification icon
 	};
 
 	event.waitUntil(

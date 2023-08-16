@@ -40,6 +40,7 @@
 .topbar-item.active,
 .topbar-item:hover {
 	background: var(--active);
+	color: var(--hover-text);
 }
 
 @media (max-width: 968px) {
