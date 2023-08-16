@@ -156,8 +156,10 @@ const Home = () => {
 		// Event listener for WebSocket messages received
 		socket.onmessage = (event) => {
 			const receivedData = JSON.parse(event.data);
+			if (receivedData.type === 'video') {
+				setNotifications(prevNotifications => [...prevNotifications, receivedData.message])
+			}
 
-			setNotifications(prevNotifications => [...prevNotifications, receivedData.message])
 		};
 
 		// Cleanup function on component unmount
