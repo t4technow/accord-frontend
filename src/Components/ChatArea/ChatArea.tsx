@@ -70,8 +70,8 @@ const ChatArea = ({
 	// Logged in user id
 	const userId = useSelector((state: RootState) => state.user.userId);
 
-	const cachedFriends =
-		useSelector((state: RootState) => state.friends.friendsList) || [];
+	// const cachedFriends =
+	// 	useSelector((state: RootState) => state.friends.friendsList) || [];
 
 	const onlineUsers = useSelector((state: RootState) => state.onlineUsers.users) || []
 
