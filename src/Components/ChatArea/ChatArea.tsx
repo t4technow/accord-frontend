@@ -122,7 +122,7 @@ const ChatArea = ({
 		setFriends([]);
 		fetchFriendsData();
 
-	}, [active, cachedFriends, dispatch]);
+	}, [active]);
 
 
 	// Function to handle sending messages over the socket connection
