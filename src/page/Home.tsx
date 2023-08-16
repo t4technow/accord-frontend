@@ -156,7 +156,7 @@ const Home = () => {
 		// Event listener for WebSocket messages received
 		socket.onmessage = (event) => {
 			const receivedData = JSON.parse(event.data);
-			if (receivedData.type === 'video') {
+			if (receivedData.type !== 'chat') {
 				setNotifications(prevNotifications => [...prevNotifications, receivedData.message])
 			}
 
