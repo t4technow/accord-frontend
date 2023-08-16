@@ -139,4 +139,3 @@ export interface RootState {
     onlineUsers: Partial<OnlineUsers>,
     chat: Partial<ChatState>;
 }
-

@@ -1,15 +1,15 @@
-
+import './ServerSkelton.css'
 const ServerSkelton = () => {
   return (
     // React hooks and types
 
     <div className="server-list">
-      <div className="server-list_item direct-messages">
+      <div className="server-list_item">
         <div className="mention-pill unread"></div>
         <div
           className='server active'
         >
-          <img className="server_avatar avatar" src="/adobe.jpg" />
+          <img className="server_avatar_skelton" src="/adobe.jpg" />
         </div>
       </div>
       <div className="separator"></div>
@@ -18,10 +18,9 @@ const ServerSkelton = () => {
         <div className="mention-pill unread"></div>
         <div
           className='server'
-
         >
           <div
-            className="server_avatar avatar"
+            className="server_avatar_skelton"
           ></div>
         </div>
       </div>
@@ -30,10 +29,9 @@ const ServerSkelton = () => {
         <div className="mention-pill unread"></div>
         <div
           className='server'
-
         >
           <div
-            className="server_avatar avatar"
+            className="server_avatar_skelton"
           ></div>
         </div>
       </div>
@@ -42,10 +40,9 @@ const ServerSkelton = () => {
         <div className="mention-pill unread"></div>
         <div
           className='server'
-
         >
           <div
-            className="server_avatar avatar"
+            className="server_avatar_skelton"
           ></div>
         </div>
       </div>
@@ -54,10 +51,9 @@ const ServerSkelton = () => {
         <div className="mention-pill unread"></div>
         <div
           className='server'
-
         >
           <div
-            className="server_avatar avatar"
+            className="server_avatar_skelton"
           ></div>
         </div>
       </div>

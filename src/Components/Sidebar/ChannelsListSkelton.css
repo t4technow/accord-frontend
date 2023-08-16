@@ -1,0 +1,70 @@
+.skelton-list_item {
+  padding: 1px 0px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-inline: 0.5rem;
+  margin: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.skelton-list_item.active {
+  background-color: var(--hover-bg);
+}
+
+.skeleton-text {
+  width: 50%;
+  height: 0.7rem;
+  border-radius: 0.25rem;
+  background-color: var(--primary-color);
+}
+
+.skelton-list_item.active {
+  background-color: var(--active);
+  color: var(--white);
+}
+
+.skelton-avatar {
+  height: 32px;
+  width: 32px;
+  background: var(--primary-color);
+  border-radius: 50%;
+}
+
+.secondary-sidebar {
+  width: 240px;
+  height: 100vh;
+  background-color: var(--dark-secondary);
+  position: relative;
+}
+
+.topbar,
+.secondary-sidebar_header {
+  height: 48px;
+  padding: 10px;
+  box-shadow: rgba(2, 2, 2, 0.2) 0px 1px;
+}
+
+.secondary-sidebar_header .search-toggler {
+  width: 100%;
+  height: 100%;
+  padding: 1px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: start;
+  color: var(--primary-color);
+  background-color: var(--dark);
+  border-radius: 4px;
+}
+
+.channel-name {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: relative;
+}

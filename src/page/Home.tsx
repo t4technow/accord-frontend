@@ -1,24 +1,27 @@
 // React and React Router hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import { wsHead } from "@/config/Constants";
 
 // Components
-import ServerList from "@/Components/Sidebar/ServerList";
+const ServerList = lazy(() => import('@/Components/Sidebar/ServerList'))
+const ChannelsList = lazy(() => import('@/Components/Sidebar/ChannelsList'))
+const ChatArea = lazy(() => import("@/Components/ChatArea/ChatArea"));
+const Topbar = lazy(() => import("@/Components/Topbar/Topbar"));
 import ServerCreation from "@/Components/Forms/ServerCreation";
-import ChannelsList from "@/Components/Sidebar/ChannelsList";
-import Topbar from "@/Components/Topbar/Topbar";
-import ChatArea from "@/Components/ChatArea/ChatArea";
 import RightBar from "@/Components/RightBar/RightBar";
-import Notification from "@/Components/Notification/Notification";
 
 // Types
+import Notification from "@/Components/Notification/Notification";
 import { Message, RootState, User } from "@/lib/Types";
 import { useDispatch, useSelector } from "react-redux";
 import { setOnlineUsers } from "@/redux/chat/onlineUsers";
 import { setCurrentServer } from "@/redux/server/ServerSlice";
-// import ServerSkelton from "@/Components/Sidebar/ServerSkelton";
+import ServerSkelton from "@/Components/Sidebar/ServerSkelton";
+import ChannelSkelton from "@/Components/Sidebar/ChannelSkelton";
+import TopbarSkelton from "@/Components/Topbar/TopbarSkelton";
+import ChatAreaSkelton from "@/Components/ChatArea/ChatAreaSkelton";
 
 
 const Home = () => {
@@ -48,13 +51,6 @@ const Home = () => {
 	const { server } = useParams()
 
 	const serverList = useSelector((state: RootState) => state.server.servers)
-
-	// useEffect(() => {
-	// 	console.log('rerendered')
-
-	// 	setShowSidebar(false)
-	// 	setShowSidebar(sidebarVisibility)
-	// }, [currentChat, sidebarVisibility])
 
 	// Function to show message, if any in redirect
 	useEffect(() => {
@@ -198,45 +194,52 @@ const Home = () => {
 				<div className="info-message"> {location.state.message} </div>
 			) : null}
 			<div className={`sidebar ${showSidebar ? 'mobile' : ''}`}>
-				<ServerList
-					showCreateServer={showCreateServer}
-					setShowCreateServer={setShowCreateServer}
-				/>
-				{/* <ServerSkelton /> */}
-				<ChannelsList
-					dm={dm}
-					setDm={setDm}
-					onlineStatusSocket={onlineStatusSocket}
-				/>
+				<Suspense fallback={<ServerSkelton />}>
+					<ServerList
+						showCreateServer={showCreateServer}
+						setShowCreateServer={setShowCreateServer}
+					/>
+				</Suspense>
+				<Suspense fallback={<ChannelSkelton />}>
+					<ChannelsList
+						dm={dm}
+						setDm={setDm}
+						onlineStatusSocket={onlineStatusSocket}
+					/>
+				</Suspense>
 			</div>
 
 			{!showSidebar ?
 				<div className={`main-content-wrapper ${!showSidebar && 'show'}`} >
-					<Topbar
-						active={active}
-						setActive={setActive}
-						searchQuery={searchQuery}
-						setSearchQuery={setSearchQuery}
-						searchResults={searchResults}
-						setSearchResults={setSearchResults}
-						setHighlightedMessageIndex={setHighlightedMessageIndex}
-						messages={messages}
-						setShowVideo={setShowVideo}
-					/>
+					<Suspense fallback={<TopbarSkelton />}>
+						<Topbar
+							active={active}
+							setActive={setActive}
+							searchQuery={searchQuery}
+							setSearchQuery={setSearchQuery}
+							searchResults={searchResults}
+							setSearchResults={setSearchResults}
+							setHighlightedMessageIndex={setHighlightedMessageIndex}
+							messages={messages}
+							setShowVideo={setShowVideo}
+						/>
+					</Suspense>
 					<div className="offset"></div>
 					<div className="main-content d-flex">
-						<ChatArea
-							friends={friends}
-							setFriends={setFriends}
-							active={active}
-							dm={dm}
-							setDm={setDm}
-							searchResults={searchResults}
-							highlightedMessageIndex={highlightedMessageIndex}
-							messages={messages}
-							setMessages={setMessages}
-							showVideo={showVideo}
-						/>
+						<Suspense fallback={<ChatAreaSkelton />}>
+							<ChatArea
+								friends={friends}
+								setFriends={setFriends}
+								active={active}
+								dm={dm}
+								setDm={setDm}
+								searchResults={searchResults}
+								highlightedMessageIndex={highlightedMessageIndex}
+								messages={messages}
+								setMessages={setMessages}
+								showVideo={showVideo}
+							/>
+						</Suspense>
 						<RightBar />
 					</div>
 				</div>
@@ -245,10 +248,12 @@ const Home = () => {
 
 
 			{showCreateServer && (
-				<ServerCreation
-					showModal={showCreateServer}
-					setShowModal={setShowCreateServer}
-				/>
+				<Suspense fallback={<div className="loading"></div>} >
+					<ServerCreation
+						showModal={showCreateServer}
+						setShowModal={setShowCreateServer}
+					/>
+				</Suspense>
 			)}
 			{notifications.length > 0 &&
 				<div className="notifications-holder">

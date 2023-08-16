@@ -36,13 +36,16 @@ const ServerList = ({ showCreateServer, setShowCreateServer }: Props) => {
 	// Get servers of current user
 	const fetchServers = async () => {
 		const servers = await getUserServers()
-		if (servers) dispatch(setServers(servers));
+		if (servers) {
+			dispatch(setServers(servers))
+		}
 	}
 
 	useEffect(() => {
 		if (servers.length < 1)
 			fetchServers()
 	}, []);
+
 
 	return (
 		<div className="server-list">
