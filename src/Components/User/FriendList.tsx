@@ -189,9 +189,9 @@ const FriendList = ({
 														onClick={() =>
 															axiosInstance
 																.get(`accept-request/${friend.friend_id}/`)
-																.then((res) => {
+																.then(() => {
 																	if (pendingReqCount > 0) dispatch(setPendingRequests(pendingReqCount - 1))
-																	setDm && setDm([...dm, res.data]);
+
 																	if (Array.isArray(friends) && i >= 0 && i < friends.length && setFriends) {
 																		const newFriends = [...friends];
 																		newFriends.splice(i, 1);
@@ -224,6 +224,7 @@ const FriendList = ({
 											<div
 												className="add-friend"
 												onClick={() => {
+													setDm && setDm([...dm, friend]);
 													dispatch(setCurrentChat(friend.friend_id))
 													dispatch(setChatType('user'))
 												}}

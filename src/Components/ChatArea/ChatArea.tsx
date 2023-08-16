@@ -13,7 +13,7 @@ import FriendList from "../User/FriendList";
 
 // AxiosInstance and constants
 import { wsHead } from "@/config/Constants";
-import { getFriendSuggestions, getFriends, getOnlineUsers, getPendingRequests } from "@/services/apiGET";
+import { getChatThreads, getFriendSuggestions, getFriends, getOnlineUsers, getPendingRequests } from "@/services/apiGET";
 
 // Types
 import { Message, RootState, User } from "@/lib/Types";
@@ -124,6 +124,12 @@ const ChatArea = ({
 
 	}, [active]);
 
+	const fetchChatThreads = async () => {
+		const chats = await getChatThreads()
+		if (chats && typeof chats != typeof "string") {
+			setDm(chats);
+		}
+	}
 
 	// Function to handle sending messages over the socket connection
 	useEffect(() => {
@@ -146,6 +152,15 @@ const ChatArea = ({
 		// Event listener for WebSocket messages received
 		socket.onmessage = (event) => {
 			const receivedData = JSON.parse(event.data);
+
+			const chat_type = receivedData.is_group_chat ? 'group' : 'user'
+			const existingChat = dm.some(item => {
+				return item.id === receivedData.sender && item.chat_type === chat_type
+			})
+
+			if (!existingChat) fetchChatThreads()
+
+
 
 			if (receivedData.message_type === 'chat') {
 				let newReceivedFiles = null;
