@@ -73,7 +73,7 @@ const manifestForPlugin: Partial<VitePWAOptions> ={
 export default defineConfig({
   server: { https: false, host: true },
   plugins: [react(),
-    VitePWA(manifestForPlugin),
+    // VitePWA(manifestForPlugin),
     // VitePWA({
     //   registerType: 'autoUpdate',
     //   outDir: path.resolve(__dirname, 'public'),
