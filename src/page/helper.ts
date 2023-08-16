@@ -44,18 +44,6 @@ export const servers = {
 }
 
 
-// export const info = (message:string) => toast.warn(message,
-//     { position: "top-right",
-//     autoClose: 2000,
-//     hideProgressBar: true,
-//     closeOnClick: true,
-//     progressStyle:{color:'red'},
-//     pauseOnHover: false,
-//     draggable: true,
-//     progress: undefined,
-//     theme: "light", })
-
-
 export function toggle_video(Media:MediaStream) {
     let videoTrack = Media.getVideoTracks().find(track=>track.kind === "video")
 

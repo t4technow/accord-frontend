@@ -1323,9 +1323,8 @@ const Auth = () => {
 
 			<div className="d-flex auth-container">
 				<div
-					className={`form-wrapper auth-form ${
-						location.pathname === "/user/login" && "expanded"
-					}`}
+					className={`form-wrapper auth-form ${location.pathname === "/user/login" && "expanded"
+						}`}
 				>
 					{location.pathname === "/user/login" && <Login />}
 					{location.pathname === "/user/register" && <Register />}

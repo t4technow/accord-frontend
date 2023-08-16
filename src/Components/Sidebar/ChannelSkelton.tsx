@@ -2,7 +2,7 @@ import './ChannelsListSkelton.css'
 
 const ChannelSkelton = () => {
   return (
-    <div className="secondary-sidebar">
+    <div className="secondary-sidebar skelton">
       <div className="secondary-sidebar_header">
         <button className="search-toggler">Find or start a conversation</button>
       </div>

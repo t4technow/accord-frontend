@@ -48,24 +48,17 @@ const App = () => {
 			try {
 				const registration = await navigator.serviceWorker.register('/serviceWorker.js', {
 					scope: '/',
-				});
-				console.log('Service Worker registered with scope:', registration.scope);
-
-				// Set up the controllerchange event listener
-				navigator.serviceWorker.addEventListener('controllerchange', async () => {
-					console.log('Service worker activated');
-
-					// Fetch the active service worker registration
-					const registration = await navigator.serviceWorker.getRegistration();
-
-					if (registration) {
+				})
+					.then(async (registration) => {
+						console.log('Service Worker registered with scope:', registration.scope);
 						try {
 							await handlePushSubscription(registration);
 						} catch (error) {
 							console.error('Push subscription failed:', error);
 						}
-					}
-				});
+					})
+
+				// Set up the controllerchange event listener
 
 			} catch (error) {
 				console.error('Service Worker registration failed:', error);
@@ -131,10 +124,16 @@ const App = () => {
 		}
 	};
 
+	async function initializePush() {
+		await requestNotificationPermission();
+		await registerServiceWorker();
+	}
+	initializePush();
+
 	useEffect(() => {
 		if (!loggedUser) return
 		if (Notification.permission !== 'granted') {
-			requestNotificationPermission();
+			initializePush()
 		}
 		checkCameraPermission()
 		console.log(loggedUser, '---')

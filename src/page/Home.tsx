@@ -14,7 +14,6 @@ import RightBar from "@/Components/RightBar/RightBar";
 
 // Types
 import Notification from "@/Components/Notification/Notification";
-import { Message, RootState, User } from "@/lib/Types";
 import { useDispatch, useSelector } from "react-redux";
 import { setOnlineUsers } from "@/redux/chat/onlineUsers";
 import { setCurrentServer } from "@/redux/server/ServerSlice";
@@ -23,6 +22,7 @@ import ChannelSkelton from "@/Components/Sidebar/ChannelSkelton";
 import TopbarSkelton from "@/Components/Topbar/TopbarSkelton";
 import ChatAreaSkelton from "@/Components/ChatArea/ChatAreaSkelton";
 
+import { Message, RootState, User } from "@/lib/Types";
 
 const Home = () => {
 
