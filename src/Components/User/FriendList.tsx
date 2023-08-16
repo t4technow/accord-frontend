@@ -12,6 +12,7 @@ import { setChatType, setCurrentChat, setShowSidebar } from "@/redux/chat/curren
 import { getRandomColor } from "@/utils/colorGenerator";
 import { setPendingRequests } from "@/redux/user/userSlice";
 import { setFriendsList } from "@/redux/chat/friendsSlice";
+import { getFriends } from "@/services/apiGET";
 
 interface Props {
 	users: User[] | undefined;
@@ -88,6 +89,17 @@ const FriendList = ({
 		else return false;
 	};
 
+	const fetchFriends = async () => {
+		try {
+			const friendsList = await getFriends()
+			if (friendsList) {
+				dispatch(setFriendsList(friendsList));
+			}
+		}
+		catch {
+			console.log('error fetching friends')
+		}
+	}
 	return (
 		<>
 			{localUsers?.map((friend, i) => {
@@ -185,8 +197,8 @@ const FriendList = ({
 																		newFriends.splice(i, 1);
 																		// Update state with the new array
 																		setFriends(newFriends);
-
 																	}
+																	fetchFriends()
 																})
 														}
 													>
