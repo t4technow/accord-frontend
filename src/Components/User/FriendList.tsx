@@ -225,6 +225,7 @@ const FriendList = ({
 												className="add-friend"
 												onClick={() => {
 													dispatch(setCurrentChat(friend.friend_id))
+													dispatch(setChatType('user'))
 												}}
 											>
 												<svg
