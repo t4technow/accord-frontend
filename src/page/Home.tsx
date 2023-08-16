@@ -119,7 +119,6 @@ const Home = () => {
 		// Event listener for WebSocket messages received
 		socket.onmessage = (event) => {
 			const receivedData = JSON.parse(event.data);
-			console.log(receivedData.type, '==========')
 			dispatch(setOnlineUsers(receivedData.online_users))
 		};
 
@@ -165,7 +164,6 @@ const Home = () => {
 		};
 	}, []);
 
-	console.log('first first', showSidebar)
 
 	useEffect(() => {
 		const timeoutIds: any[] = [];
