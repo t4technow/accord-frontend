@@ -179,7 +179,12 @@ const FriendList = ({
 																.then((res) => {
 																	if (pendingReqCount > 0) dispatch(setPendingRequests(pendingReqCount - 1))
 																	setDm && setDm([...dm, res.data]);
-																	friends && friends.splice(i, 1);
+																	if (Array.isArray(friends) && i >= 0 && i < friends.length && setFriends) {
+																		const newFriends = [...friends];
+																		newFriends.splice(i, 1);
+																		// Update state with the new array
+																		setFriends(newFriends);
+																	}
 																})
 														}
 													>

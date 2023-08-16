@@ -57,6 +57,10 @@
 	}
 }
 
+.message-holder {
+	max-width: calc(100vw - 44rem);
+}
+
 .message {
 	color: #fff;
 	width: fit-content;
@@ -67,7 +71,7 @@
 	z-index: 1;
 	display: flex;
 	gap: 0.4rem;
-	max-width: calc(100% - 20rem);
+	max-width: calc(100% - 5rem);
 }
 
 .message.after::after {
