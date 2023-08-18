@@ -1,6 +1,5 @@
 // React hooks and types
 import {
-	FormEvent,
 	MouseEvent,
 	useState,
 	useEffect,
@@ -126,8 +125,7 @@ const Topbar = ({
 	};
 
 	// Submit group creation form
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		console.log("first", name.trim());
 
 		if (name) {
@@ -384,7 +382,7 @@ const Topbar = ({
 									className={`create-group ${showCreateGroup && "show"}`}
 									ref={createGroupRef}
 								>
-									<form onSubmit={handleSubmit}>
+									<div>
 										<div
 											className={`header ${section === 2 && isScrolled ? "shadow" : ""
 												}`}
@@ -483,16 +481,18 @@ const Topbar = ({
 												ref={friendsListRef}
 												onScroll={handleScroll}
 											>
-												{filteredList.length > 0 ? (
-													<FriendList
-														users={filteredList}
-														selection={true}
-														selectedList={selectedMembers}
-														setSelectedList={setSelectedMembers}
-														selectedIds={selectedIds}
-														setSelectedIds={setSelectedIds}
-													/>
-												) : (
+
+
+												{/* {filteredList.length > 0 ? ( */}
+												<FriendList
+													users={searchQueryRef.current?.value !== '' ? filteredList : friends}
+													selection={true}
+													selectedList={selectedMembers}
+													setSelectedList={setSelectedMembers}
+													selectedIds={selectedIds}
+													setSelectedIds={setSelectedIds}
+												/>
+												{filteredList.length === 0 && searchQueryRef.current?.value !== '' && (
 													<p
 														style={{
 															textAlign: "center",
@@ -507,20 +507,23 @@ const Topbar = ({
 										)}
 										<div className="modal-footer dark">
 											{section === 2 ? (
-												<button type="submit" className="create w-100">
+												<button type="button" className="create w-100" onClick={() => handleSubmit()}>
 													Create
 												</button>
 											) : (
 												<a
 													role="button"
 													className="create w-100"
-													onClick={() => setSection(2)}
+													onClick={() => {
+														setSection(2)
+														searchQueryRef.current?.click()
+													}}
 												>
 													Next
 												</a>
 											)}
 										</div>
-									</form>
+									</div>
 								</div>
 							</>
 						) : (

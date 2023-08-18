@@ -83,15 +83,17 @@ const ChatArea = ({
 	const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
 
 	// Function to set friends details such as suggestions, friend requests, and active friends
+	const fetchOnlineUsers = async () => {
+		if (onlineUsers?.length > 0) {
+			const friendsList = await getOnlineUsers(onlineUsers)
+			if (friendsList) {
+				setFriends(friendsList);
+			}
+		} else setFriends([])
+	}
 	const fetchFriendsData = async () => {
 		if (active === "") {
-			if (onlineUsers?.length > 0) {
-				const friendsList = await getOnlineUsers(onlineUsers)
-				if (friendsList) {
-					setFriends(friendsList);
-				}
-			}
-			return;
+			fetchOnlineUsers()
 		}
 
 		try {
@@ -123,6 +125,10 @@ const ChatArea = ({
 		fetchFriendsData();
 
 	}, [active]);
+
+	useEffect(() => {
+		console.log(onlineUsers)
+	}, [onlineUsers])
 
 	const fetchChatThreads = async () => {
 		const chats = await getChatThreads()
@@ -158,6 +164,8 @@ const ChatArea = ({
 				return item.id === receivedData.sender && item.chat_type === chat_type
 			})
 
+			console.log(receivedData)
+
 			if (!existingChat) fetchChatThreads()
 
 
@@ -183,14 +191,16 @@ const ChatArea = ({
 						profilePic: receivedData.profile_pic,
 						username: receivedData.username,
 						group: receivedData.group,
+						channel_id: receivedData.channel_id,
 						timestamp: receivedData.timestamp,
 						is_group_chat: receivedData.is_group_chat,
 						files: newReceivedFiles,
 					};
 
+					console.log('yes')
 					// Update messages if new message is received in the active group
 					if (
-						receivedMessage.group === currentChat &&
+						receivedMessage.group === currentChat || receivedMessage.channel_id === currentChat &&
 						receivedData.is_group_chat === true
 					)
 						setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -248,7 +258,6 @@ const ChatArea = ({
 			setSelectedFiles((prevFiles) => [...prevFiles, ...updatedFiles]);
 		}
 	};
-
 
 	// Function to send messages
 	const handleSendMessage = async () => {

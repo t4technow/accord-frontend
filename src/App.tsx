@@ -15,15 +15,8 @@ import { useEffect } from "react";
 import { RootState } from "./lib/Types";
 import { useSelector } from "react-redux";
 import axiosInstance from "./config/axiosInstance";
+import { VAPID_PUBLIC_KEY } from "./config/Constants";
 
-interface PushSubscription {
-	endpoint: string;
-	expirationTime: number | null;
-	keys: {
-		p256dh: string;
-		auth: string;
-	};
-}
 
 const App = () => {
 
@@ -73,31 +66,31 @@ const App = () => {
 
 	async function handlePushSubscription(registration: any) {
 		try {
-			console.log('handlePushSubscription')
+			console.log('handlePushSubscription', registration)
 			const subscription = await registration.pushManager.subscribe({
 				userVisibleOnly: true,
-				applicationServerKey: 'BK95jBHi_8FQsytb4NIZB3XOtPnoc_LPDPikuDGIb_SJUE5bR_vslHBedZM1Mfbb1smR6YdbFCCsgQlhlmYatyU',
+				applicationServerKey: VAPID_PUBLIC_KEY
 			});
 
 			console.log('Push subscription:', subscription);
 
-			const deviceToken = btoa(
-				subscription.keys.p256dh + ':' + subscription.keys.auth
-			);
 
-			await sendSubscriptionToServer(subscription, deviceToken);
-			console.log('Device Token:', deviceToken);
+			await sendSubscriptionToServer(subscription.endpoint);
+			console.log('Device Token:');
 		} catch (error) {
 			console.error('Push subscription failed:', error);
 		}
 	}
 
-	async function sendSubscriptionToServer(subscription: PushSubscription, deviceToken: any) {
+	async function sendSubscriptionToServer(endpoint: string) {
 		try {
-			const response = await axiosInstance.post('push/subscribe/', {  // Update the URL to your Django API endpoint
-				subscription,
-				deviceToken,
+			const response = await axiosInstance.post('push/subscribe/', {
+				user_id: loggedUser,
+				endpoint,
+				vapid_key: VAPID_PUBLIC_KEY,
 			});
+
+			console.log(response)
 
 			if (response.status === 200) {
 				console.log('Subscription sent to server successfully.');
@@ -128,7 +121,6 @@ const App = () => {
 		await requestNotificationPermission();
 		await registerServiceWorker();
 	}
-	initializePush();
 
 	useEffect(() => {
 		if (!loggedUser) return

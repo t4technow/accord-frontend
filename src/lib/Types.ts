@@ -69,6 +69,7 @@ export interface Message {
     delivery_status?: boolean
     delivered_to?: (number |string)[]
     read_by?: (number |string)[]
+    channel_id?: number;
 
 }
 

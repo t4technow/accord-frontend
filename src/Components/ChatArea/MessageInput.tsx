@@ -50,7 +50,6 @@ const MessageInput = ({
 
 	const inputRef = useRef<HTMLDivElement>(null);
 	const sendRef = useRef<HTMLButtonElement>(null)
-
 	useEffect(() => {
 		inputRef.current!.focus();
 	}, [])

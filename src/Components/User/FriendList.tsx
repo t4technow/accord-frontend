@@ -226,7 +226,7 @@ const FriendList = ({
 												onClick={() => {
 													setDm && setDm([...dm, friend]);
 													dispatch(setCurrentChat(friend.friend_id))
-													dispatch(setChatType('user'))
+													friend.chat_type && dispatch(setChatType(friend.chat_type))
 												}}
 											>
 												<svg
@@ -253,6 +253,7 @@ const FriendList = ({
 												className="add-friend"
 												onClick={() => {
 													dispatch(setCurrentChat(friend.id))
+													friend.chat_type && dispatch(setChatType(friend.chat_type))
 												}}
 											>
 												<svg
