@@ -175,10 +175,10 @@ ul.search-results {
 
 	.send-message {
 		width: 100%;
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		position: fixed !important;
+		bottom: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
 		padding-inline: 1rem;
 		padding-bottom: 1rem;
 	}
