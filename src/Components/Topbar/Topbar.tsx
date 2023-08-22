@@ -24,11 +24,13 @@ import "./Topbar.css";
 import { getGroupInfo, getServerInfo, getUserInfo } from "@/services/apiGET";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowSidebar } from "@/redux/chat/currentChatSlice";
+import UserProfile from "../User/UserProfile";
 
 // Props and peculiar types
 interface Props {
 	active: string;
 	setActive: React.Dispatch<SetStateAction<string>>;
+	setSearched: React.Dispatch<SetStateAction<boolean>>;
 	searchQuery: string;
 	setSearchQuery: React.Dispatch<SetStateAction<string>>;
 	searchResults: number[];
@@ -41,6 +43,7 @@ interface Props {
 const Topbar = ({
 	active,
 	setActive,
+	setSearched,
 	searchQuery,
 	setSearchQuery,
 	searchResults,
@@ -84,6 +87,7 @@ const Topbar = ({
 
 	const serverId = useSelector((state: RootState) => state.server.currentServer)
 	const showSidebar = useSelector((state: RootState) => state.chat.showSidebar) || false
+	const [showProfile, setShowProfile] = useState<boolean>(false)
 
 	const fetchChatInfo = async (chatId: number) => {
 		try {
@@ -204,7 +208,9 @@ const Topbar = ({
 
 	// Handle message search
 	const handleSearch = useCallback(() => {
+		setSearched(true)
 		if (searchQuery.trim() === "") {
+			setSearched(false)
 			setSearchResults([]);
 			setHighlightedMessageIndex(-1);
 		} else {
@@ -308,41 +314,52 @@ const Topbar = ({
 							<div className="topbar-header d-flex">
 								{recipient && (
 									<>
-										{recipient?.avatar ||
-											(isUser(recipient) && (recipient as User).profile?.avatar) ? (
-											<img
-												className="channel-avatar avatar"
-												src={
-													chatType === "user" && isUser(recipient)
-														? recipient.profile?.avatar
-														: recipient.avatar
-												}
-												alt=""
-											/>
-										) : (
-											<div className="channel-avatar avatar name">
-												<span className="head">
-													{chatType === "user" && isUser(recipient)
-														? recipient?.username.charAt(0).toUpperCase()
-														: recipient?.name?.charAt(0).toUpperCase()}
-												</span>
-											</div>
-										)}
-										<div className="meta">
-											<span className="channel-name">
-												{chatType === "user" && isUser(recipient)
-													? recipient?.username
-													: recipient?.name}
-											</span>
-											{chatType === "user" && (
-												<div className="online-status">
-													{onlineUsers?.includes(recipient.id + "")
-														? "online"
-														: "offline"}
+										<div className="recipient-info d-flex">
+											{recipient?.avatar ||
+												(isUser(recipient) && (recipient as User).profile?.avatar) ? (
+												<img
+													className="channel-avatar avatar"
+													src={
+														chatType === "user" && isUser(recipient)
+															? recipient.profile?.avatar
+															: recipient.avatar
+													}
+													alt=""
+													onClick={() => {
+														setShowProfile(true)
+													}}
+												/>
+											) : (
+												<div className="channel-avatar avatar name">
+													<span className="head">
+														{chatType === "user" && isUser(recipient)
+															? recipient?.username.charAt(0).toUpperCase()
+															: recipient?.name?.charAt(0).toUpperCase()}
+													</span>
 												</div>
+											)}
+											<div className="meta" onClick={() => {
+												setShowProfile(true)
+											}}>
+												<span className="channel-name">
+													{chatType === "user" && isUser(recipient)
+														? recipient?.username
+														: recipient?.name}
+												</span>
+												{chatType === "user" && (
+													<div className="online-status">
+														{onlineUsers?.includes(recipient.id + "")
+															? "online"
+															: "offline"}
+													</div>
+												)}
+											</div>
+											{isUser(recipient) && showProfile && (
+												<UserProfile currentUser={recipient} setShowProfile={setShowProfile} />
 											)}
 										</div>
 									</>
+
 								)}
 							</div>
 						</div>
@@ -551,7 +568,10 @@ const Topbar = ({
 										placeholder="search message"
 										className="search-messages"
 										value={searchQuery}
-										onChange={(e) => setSearchQuery(e.target.value)}
+										onChange={(e) => {
+											if (e.target.value === '') setSearched(false)
+											setSearchQuery(e.target.value)
+										}}
 									/>
 									<div className="search-args">
 										{searchResults.length > 0 && (

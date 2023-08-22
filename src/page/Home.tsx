@@ -36,6 +36,7 @@ const Home = () => {
 	const [onlineStatusSocket, setOnlineSocket] = useState<WebSocket | null>(null)
 
 	const [searchQuery, setSearchQuery] = useState<string>("");
+	const [searched, setSearched] = useState<boolean>(false)
 	const [searchResults, setSearchResults] = useState<number[]>([]);
 	const [highlightedMessageIndex, setHighlightedMessageIndex] = useState<number>(-1);
 	const [messages, setMessages] = useState<Message[] | []>([]);
@@ -213,6 +214,7 @@ const Home = () => {
 						<Topbar
 							active={active}
 							setActive={setActive}
+							setSearched={setSearched}
 							searchQuery={searchQuery}
 							setSearchQuery={setSearchQuery}
 							searchResults={searchResults}
@@ -231,6 +233,8 @@ const Home = () => {
 								active={active}
 								dm={dm}
 								setDm={setDm}
+								searched={searched}
+								searchQuery={searchQuery}
 								searchResults={searchResults}
 								highlightedMessageIndex={highlightedMessageIndex}
 								messages={messages}

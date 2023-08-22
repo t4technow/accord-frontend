@@ -22,3 +22,15 @@ export const createServerRequest = async(serverInfo: ServerCreationInfo) => {
     }))
 }
 
+
+export const blockUser = async(username: string) => {
+  return await handleRequest(axiosInstance.post("block-user/" + username + '/', {
+      headers: { "Content-Type": "multipart/form-data" },
+    }))
+}
+
+export const unBlockUser = async(username: string) => {
+  return await handleRequest(axiosInstance.post("unblock-user/" + username + '/', {
+      headers: { "Content-Type": "multipart/form-data" },
+    }))
+}

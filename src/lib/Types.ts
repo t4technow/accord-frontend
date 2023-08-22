@@ -42,6 +42,7 @@ export interface User {
     chat_type?: 'user' | 'group';
     unread_count?: number;
     pending_requests?: number;
+    is_blocked?: boolean;
 }
 
 export interface Group {

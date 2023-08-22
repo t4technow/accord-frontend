@@ -33,6 +33,8 @@ interface Props {
 	setDm: React.Dispatch<SetStateAction<User[]>>;
 	messages: Message[];
 	setMessages: React.Dispatch<SetStateAction<Message[]>>;
+	searched: boolean;
+	searchQuery: string;
 	searchResults: number[];
 	highlightedMessageIndex: number;
 	showVideo: boolean;
@@ -53,6 +55,8 @@ const ChatArea = ({
 	setDm,
 	messages,
 	setMessages,
+	searched,
+	searchQuery,
 	searchResults,
 	highlightedMessageIndex,
 	showVideo,
@@ -315,6 +319,8 @@ const ChatArea = ({
 					<ChatComponent
 						messages={messages}
 						setMessages={setMessages}
+						searched={searched}
+						searchQuery={searchQuery}
 						searchResults={searchResults}
 						highlightedMessageIndex={highlightedMessageIndex}
 					/>

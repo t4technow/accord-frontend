@@ -349,3 +349,9 @@
 	position: relative;
 	top: 6px;
 }
+
+.date.no-results {
+	color: tomato;
+	border-radius: inherit;
+	background-color: var(--dark);
+}

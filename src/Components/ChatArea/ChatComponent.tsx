@@ -19,6 +19,8 @@ import {
 interface Props {
 	messages: Message[];
 	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+	searched: boolean;
+	searchQuery: string;
 	searchResults: number[];
 	highlightedMessageIndex: number;
 }
@@ -26,6 +28,8 @@ interface Props {
 const ChatComponent = ({
 	messages,
 	setMessages,
+	searched,
+	searchQuery,
 	searchResults,
 	highlightedMessageIndex,
 }: Props) => {
@@ -122,6 +126,12 @@ const ChatComponent = ({
 
 	return (
 		<div className="messages-holder">
+			{searched && (searchQuery != '' && searchResults.length === 0) ?
+				<div className="date no-results">
+					No message found
+				</div>
+				: null
+			}
 			{openFile ? (
 				<div className="view-file">
 					<button

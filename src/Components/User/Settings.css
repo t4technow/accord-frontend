@@ -28,3 +28,15 @@
   z-index: 10;
   color: #fff;
 }
+
+.user-profile .close-modal {
+  position: absolute;
+  background: none;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 11;
+}
+
+.user-profile .close-modal svg path {
+  fill: #fff;
+}

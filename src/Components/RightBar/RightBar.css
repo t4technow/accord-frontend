@@ -52,6 +52,15 @@
 	position: absolute;
 	bottom: 1rem;
 	right: 0;
+	background: var(--dark);
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	color: #e60526;
+	cursor: pointer;
+}
+
+.hash.blocked {
+	color: var(--green);
 }
 
 .user-meta,
