@@ -1909,10 +1909,10 @@ vite@^4.4.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-web-push@^3.6.4:
-  version "3.6.4"
-  resolved "https://registry.npmjs.org/web-push/-/web-push-3.6.4.tgz#3293a390d3058f1303a509668215306f9ea7c319"
-  integrity sha512-An4nhiYuCPJkD51hXid7OIO3TACJsSUhj6XWDNvCDiLCS5ucEkhPUnh/s+jOWAJUUDASGHkuU8hFHg+mX+4vLQ==
+web-push@^3.6.5:
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/web-push/-/web-push-3.6.6.tgz#592facb26116187136b0d543768ef85675791ac8"
+  integrity sha512-SyteEck9fiCskNmPxs/GFhJsZrIyLfRvjWNmcUwULLJyCU0f1oxo2sWTokXA1mDAq9vxk4e4gVcb/8agq73NkQ==
   dependencies:
     asn1.js "^5.3.0"
     http_ece "1.1.0"
