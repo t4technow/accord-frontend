@@ -14,6 +14,7 @@
 		"axios": "^1.4.0",
 		"dayjs": "^1.11.9",
 		"emoji-picker-react": "^4.4.10",
+		"firebase": "^10.3.0",
 		"jwt-decode": "^3.1.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

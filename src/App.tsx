@@ -14,8 +14,7 @@ import "./App.css";
 import { useEffect } from "react";
 import { RootState } from "./lib/Types";
 import { useSelector } from "react-redux";
-import axiosInstance from "./config/axiosInstance";
-import { VAPID_PUBLIC_KEY } from "./config/Constants";
+import { requestPermission } from "./lib/firebase";
 
 
 const App = () => {
@@ -23,84 +22,7 @@ const App = () => {
 	const loggedUser = useSelector((state: RootState) => state.user.userId);
 	// const VAPID = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
-	async function requestNotificationPermission() {
-		if (!('PushManager' in window)) {
-			console.log('Push notifications are not supported.');
-			return;
-		}
-		const permission = await Notification.requestPermission();
-		if (permission === "granted") {
-			// registerServiceWorker();
-		}
-	}
 
-
-
-	async function registerServiceWorker() {
-		if ('serviceWorker' in navigator) {
-			try {
-				await navigator.serviceWorker.register('/serviceWorker.js', {
-					scope: '/',
-				})
-					.then(async (registration) => {
-						console.log('Service Worker registered with scope:', registration.scope);
-						try {
-							await handlePushSubscription(registration);
-						} catch (error) {
-							console.error('Push subscription failed:', error);
-						}
-					})
-
-				// Set up the controllerchange event listener
-
-			} catch (error) {
-				console.error('Service Worker registration failed:', error);
-			}
-		}
-	}
-
-	useEffect(() => {
-		// Register the service worker when the component mounts
-		registerServiceWorker();
-	}, []);
-
-	async function handlePushSubscription(registration: any) {
-		try {
-			console.log('handlePushSubscription', registration)
-			const subscription = await registration.pushManager.subscribe({
-				userVisibleOnly: true,
-				applicationServerKey: VAPID_PUBLIC_KEY
-			});
-
-			console.log('Push subscription:', subscription);
-
-
-			await sendSubscriptionToServer(subscription.endpoint);
-			console.log('Device Token:');
-		} catch (error) {
-			console.error('Push subscription failed:', error);
-		}
-	}
-
-	async function sendSubscriptionToServer(endpoint: string) {
-		try {
-			const response = await axiosInstance.post('push/subscribe/', {
-				user_id: loggedUser,
-				endpoint,
-				vapid_key: VAPID_PUBLIC_KEY,
-			});
-
-			console.log(response)
-
-			if (response.status === 200) {
-				console.log('Subscription sent to server successfully.');
-			} else {
-				console.error('Failed to send subscription to server.');
-			}
-		} catch (error) {
-			console.error('Error sending subscription:', error);
-		}
-	}
 
 	const checkCameraPermission = async () => {
 		try {
@@ -117,15 +39,10 @@ const App = () => {
 		}
 	};
 
-	async function initializePush() {
-		await requestNotificationPermission();
-		await registerServiceWorker();
-	}
-
 	useEffect(() => {
 		if (!loggedUser) return
 		if (Notification.permission !== 'granted') {
-			initializePush()
+			requestPermission()
 		}
 		checkCameraPermission()
 		console.log(loggedUser, '---')
