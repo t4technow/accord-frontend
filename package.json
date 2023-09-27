@@ -11,7 +11,7 @@
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.9.5",
-		"axios": "^1.4.0",
+		"axios": "^1.5.0",
 		"dayjs": "^1.11.9",
 		"emoji-picker-react": "^4.4.10",
 		"firebase": "^10.3.0",
